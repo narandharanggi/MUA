@@ -30,30 +30,17 @@ class User(db.Model, UserMixin):
 
 class Produk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    produk_make_up = db.Column(db.String(200), nullable=False)
+    produk_makeup = db.Column(db.String(200), nullable=False)
+    shade = db.Column(db.String(100), nullable=False)
     skin_color = db.Column(db.String(50), nullable=False)
     skin_undertone = db.Column(db.String(50), nullable=False)
 
     def __str__(self):
         return '<Produk %r>' % Produk.produk_make_up
 
-class Detailproduk(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    fk_produk_id = db.Column(db.Integer, db.ForeignKey('produk.id'))
-    fk_produk = db.relationship('Produk', backref='produk_detail', lazy=True)
-    fk_shade_id = db.Column(db.Integer, db.ForeignKey('shade.id'))
-    fk_shade = db.relationship('Shade', backref='shade_detail', lazy=True)
-
-class Shade(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    shade = db.Column(db.String(100), nullable=False)
-
-    def __str__(self):
-        return '<Shade %r>' % Shade.shade
-
 class Mua(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nama_MUA = db.Column(db.String(100), nullable=False)
+    nama_mua = db.Column(db.String(100), nullable=False)
     lokasi = db.Column(db.String(100), nullable=False)
     detail_lokasi = db.Column(db.String(500), nullable=False)
     latitude = db.Column(db.Float, nullable=False)  
@@ -61,8 +48,8 @@ class Mua(db.Model):
     
     def to_dict(self):
         return {
-            'nama_mua': self.nama_MUA,
-            'alamat' : self.alamat
+            'nama_mua': self.nama_mua,
+            'alamat' : self.detail_lokasi
         }
 
     def __str__(self):
@@ -73,8 +60,8 @@ class Rating(db.Model):
     fk_username_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     fk_mua_id = db.Column(db.Integer, db.ForeignKey('mua.id'), nullable=False)
     fk_mua = db.relationship('Mua', backref='mua_rating', lazy=True)
-    fk_detail_produk_id = db.Column(db.Integer, db.ForeignKey('detailproduk.id'), nullable=False)
-    fk_detail_produk = db.relationship('Detailproduk', backref='produk_rating', lazy=True)
+    fk_produk_id = db.Column(db.Integer, db.ForeignKey('produk.id'), nullable=False)
+    fk_detail_produk = db.relationship('Produk', backref='produk_rating', lazy=True)
     harga = db.Column(db.Float, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)

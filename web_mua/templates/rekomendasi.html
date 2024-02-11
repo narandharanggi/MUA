@@ -58,55 +58,11 @@ block content %}
                   aria-placeholder="Masukkan Produk"
                 >
                   <option></option>
-                  <optgroup label="Foundation">
-                    <option value="La tulipe cover foundation">
-                      La tulipe cover foundation
-                    </option>
-                  </optgroup>
-                  <optgroup label="Loose Powder">
-                    <option value="Wardah Lightening Loose Powder">
-                      Wardah Lightening Loose Powder
-                    </option>
-                  </optgroup>
-                  <optgroup label="Compact Powder">
-                    <option value="Mineral Botanica Two Way Cake Foundation">
-                      Mineral Botanica Two Way Cake Foundation
-                    </option>
-                  </optgroup>
-                  <optgroup label="Eye Shadow">
-                    <option
-                      value="Pinkflash PinkDessert 12 Shades Eyeshadow Palette"
-                    >
-                      Pinkflash PinkDessert 12 Shades Eyeshadow Palette
-                    </option>
-                  </optgroup>
-                  <optgroup label="Eyeliner">
-                    <option
-                      value="Maybelline Tattoo Liner 48H Liquid Pen Eyeliner"
-                    >
-                      Maybelline Tattoo Liner 48H Liquid Pen Eyeliner
-                    </option>
-                  </optgroup>
-                  <optgroup label="Eyebrow">
-                    <option value="Viva Queen Eye Brow Pencil">
-                      Viva Queen Eye Brow Pencil
-                    </option>
-                  </optgroup>
-                  <optgroup label="Mascara">
-                    <option value="Wardah EyeXpert Aqua Lash Mascara">
-                      Wardah EyeXpert Aqua Lash Mascara
-                    </option>
-                  </optgroup>
-                  <optgroup label="Blush">
-                    <option value="Revlon Powder Blush">
-                      Revlon Powder Blush
-                    </option>
-                  </optgroup>
-                  <optgroup label="Lip Product">
-                    <option value="Wardah Exclusive Moist Lipstick">
-                      Wardah Exclusive Moist Lipstick
-                    </option>
-                  </optgroup>
+                  {% for item in produk_items %}
+                  <option value="{{ item.produk_makeup }}">
+                    {{ item.produk_makeup }}
+                  </option>
+                  {% endfor %}
                 </select>
               </div>
 

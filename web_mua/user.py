@@ -106,6 +106,7 @@ def search():
 @login_required
 def rekomendasi():
     if current_user.role == 'user':
+        produk_items = Produk.query.with_entities(Produk.produk_makeup).distinct()
         if request.method == 'POST':  
             alamat = request.form.get('alamat')
             harga = request.form.get('harga')
@@ -121,7 +122,7 @@ def rekomendasi():
                 ls_alamat.append(result_set.alamat)
                 ls_deskripsi.append(result_set.deskripsi)
             return jsonify({'nama_mua':prediciton, 'alamat':ls_alamat, 'deskripsi':ls_deskripsi, 'rating':rating, 'jarak':distance})
-        return render_template('rekomendasi.html')
+        return render_template('rekomendasi.html', produk_items=produk_items)
     return render_template('error.html')
 
 @user.route('/rating', methods=['GET', 'POST'])
