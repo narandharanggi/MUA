@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+    />
+    <link rel="stylesheet" href="../static/main.css" />
+    <script src="../static/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <form id="user_input">
+            <div class="form-group">
+              <label for="formGroupExampleInput">MUA</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nama_MUA"
+                placeholder="Nama MUA"
+              />
+            </div>
+            <div class="form-group">
+              <label for="formGroupExampleInput2">Lokasi</label>
+              <select
+                id="nama_lokasi"
+                class="form-select"
+                aria-label="Default select example"
+              >
+                <option selected>Pilih Lokasi</option>
+                {% for row in lokasi %}
+                <option>{{ row.1 }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="formGroupExampleInput2">Harga</label>
+              <input
+                type="text"
+                id="harga"
+                class="form-control"
+                placeholder="0"
+              />
+            </div>
+            <div class="form-group row">
+              <div>
+                <label class="col-sm-6 col-md-8" for="formGroupExampleInput2"
+                  >Produk
+                </label>
+                <button
+                  type="button"
+                  class="col-6 col-md-4 btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  data-bs-whatever="@mdo"
+                >
+                  Tambah
+                </button>
+                <button
+                  type="button"
+                  id="hapus"
+                  class="col-6 col-md-4 btn btn-primary"
+                >
+                  Hapus
+                </button>
+                <label id="list_produk">
+                  <div name="produk"></div>
+                </label>
+              </div>
+
+              <!-- <input
+                type="text"
+                class="form-control"
+                id="formGroupExampleInput2"
+                placeholder="Another input"
+              /> -->
+            </div>
+            <div
+              class="modal fade"
+              id="exampleModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      New message
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="mb-3" id="produk">
+                        <label for="recipient-name" class="col-form-label"
+                          >Nama:</label
+                        >
+                        <select
+                          class="form-select"
+                          id="single-select-optgroup-field"
+                          data-placeholder="Pilih Produk"
+                        >
+                          <option></option>
+                          <optgroup label="Foundation">
+                            {% for row in produk %}
+                            <option>{{ row.1 }}</option>
+                            {% endfor %}
+                          </optgroup>
+                          <optgroup label="Group 2">
+                            <option>Algoritm</option>
+                            <option>Holistic</option>
+                          </optgroup>
+                        </select>
+                      </div>
+                      <div class="mb-3" id="shade">
+                        <label for="message-text" class="col-form-label"
+                          >Shade:</label
+                        >
+                        <select
+                          class="form-select"
+                          id="multiple-select-field"
+                          data-placeholder="Pilih Shade"
+                          multiple
+                        >
+                          <option></option>
+                          {% for row in shade %}
+                          <option>{{ row.1 }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Tutup
+                    </button>
+                    <button
+                      id="save"
+                      type="button"
+                      class="btn btn-primary"
+                      data-bs-dismiss="modal"
+                    >
+                      Simpan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" id="rekomendasi" class="btn btn-primary mb-3">
+              Rekomendasi
+            </button>
+            <div id="output"></div>
+          </form>
+        </div>
+        <div class="col-sm-9 other">
+          <h1>2 Columns</h1>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+    <script>
+      $("#single-select-optgroup-field").select2({
+        theme: "bootstrap-5",
+        dropdownParent: $("#produk"),
+        width: $(this).data("width")
+          ? $(this).data("width")
+          : $(this).hasClass("w-100")
+          ? "100%"
+          : "style",
+        placeholder: $(this).data("placeholder"),
+      });
+
+      $("#multiple-select-field").select2({
+        theme: "bootstrap-5",
+        dropdownParent: $("#shade"),
+        width: $(this).data("width")
+          ? $(this).data("width")
+          : $(this).hasClass("w-100")
+          ? "100%"
+          : "style",
+        placeholder: $(this).data("placeholder"),
+        closeOnSelect: false,
+      });
+
+      var arr = [];
+      $("#save").on("click", function () {
+        var status_ = false;
+        var a = $("#single-select-optgroup-field").val();
+        var b = $("#multiple-select-field").val();
+        var nama_produk = a + " : " + b;
+        console.log(arr.length);
+        if (arr.length === 0) {
+          arr[0] = nama_produk;
+          var lp =
+            "<div name='produk' value='" +
+            nama_produk +
+            "'>" +
+            nama_produk +
+            "</div>";
+          $("#list_produk").append(lp);
+          status_ = true;
+        } else {
+          for (let i = 0; i < arr.length; i++) {
+            if (arr[i] === nama_produk) {
+              status_ = true;
+              alert("exist");
+              break;
+            }
+          }
+        }
+
+        if (status_ === false) {
+          arr.push(nama_produk);
+          var lp =
+            "<div name='produk' value='" +
+            nama_produk +
+            "'>" +
+            nama_produk +
+            "</div>";
+          $("#list_produk").append(lp);
+        }
+      });
+
+      // $("#set").on("click", function () {
+      //   $("#list_produk").hover(function () {
+      //     $("div").removeClass();
+      //     var next = $(this).nextAll();
+      //     next.each(function (i, v) {
+      //       $(this).addClass("right" + (i + 1));
+      //     });
+      //   });
+      // });
+      $("#hapus").on("click", function () {
+        $("#list_produk div").remove();
+        arr = [];
+      });
+
+      $("#rekomendasi").on("click", function () {
+        const mua = $("#nama_MUA").val();
+        const lokasi = $("#nama_lokasi").val();
+        const harga = $("#harga").val();
+        $.ajax({
+          url: "/recommendation",
+          type: "POST",
+          contentType: "application/json;charset=UTF-8",
+          data: JSON.stringify({
+            nama_mua: $("#nama_MUA").val(),
+            nama_lokasi: $("#nama_lokasi").val(),
+            harga: $("#harga").val(),
+            produk: arr,
+          }),
+          success: function (data) {
+            console.log(data["nama_mua"]);
+          },
+        });
+
+        // var data_ = [];
+
+        // data_.push(mua);
+        // data_.push(lokasi);
+        // data_.push(harga);
+        // const all_data = data_.concat(arr);
+        // console.log(all_data);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Stylesheets -->
+    <link href="../static/css/font-awesome-all.css" rel="stylesheet" />
+    <link href="../static/css/flaticon.css" rel="stylesheet" />
+    <link href="../static/css/owl.css" rel="stylesheet" />
+    <link href="../static/css/bootstrap.css" rel="stylesheet" />
+    <link href="../static/css/jquery.fancybox.min.css" rel="stylesheet" />
+    <link href="../static/css/animate.css" rel="stylesheet" />
+    <link href="../static/css/color.css" rel="stylesheet" />
+    <link href="../static/css/style.css" rel="stylesheet" />
+    <link href="../static/css/responsive.css" rel="stylesheet" />
+    <link href="../static/multiple-select.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- <form action="/auth/rekomendasi" method="POST" class="login-form"> -->
+        <form class="login-form"></form>
+      <div class="form-group">
+        <label>alamat</label>
+        <input
+          value=""
+          type="text"
+          class="form-control alamat"
+          placeholder="Masukkan Alamat"
+        />
+      </div>
+      <div class="form-group">
+        <label>harga</label>
+        <div class="input-group">
+            <span class="input-group-text-first">$</span>
+            <input
+            value=""
+            type="number"
+            class="form-control harga"
+            placeholder="Masukkan Harga"
+            />
+            <span class="input-group-text-last">.000</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <select class="js-states form-control produk" tabindex="-1" style="display: none; width: 100%" aria-placeholder="Masukkan Produk">
+            <option></option>
+            <optgroup label="Foundation">
+                <option value="La tulipe cover foundation">La tulipe cover foundation</option>
+            </optgroup>
+            <optgroup label="Loose Powder">
+                <option value="Wardah Lightening Loose Powder">Wardah Lightening Loose Powder</option>
+            </optgroup>
+            <optgroup label="Compact Powder">
+                <option value="Mineral Botanica Two Way Cake Foundation">Mineral Botanica Two Way Cake Foundation</option>
+            </optgroup>
+            <optgroup label="Eye Shadow">
+                <option value="Pinkflash PinkDessert 12 Shades Eyeshadow Palette">Pinkflash PinkDessert 12 Shades Eyeshadow Palette</option>
+            </optgroup>
+            <optgroup label="Eyeliner">
+                <option value="Maybelline Tattoo Liner 48H Liquid Pen Eyeliner">Maybelline Tattoo Liner 48H Liquid Pen Eyeliner</option>
+            </optgroup>
+            <optgroup label="Eyebrow">
+                <option value="Viva Queen Eye Brow Pencil">Viva Queen Eye Brow Pencil</option>
+            </optgroup>
+            <optgroup label="Mascara">
+                <option value="Wardah EyeXpert Aqua Lash Mascara">Wardah EyeXpert Aqua Lash Mascara</option>
+            </optgroup>
+            <optgroup label="Blush">
+                <option value="Revlon Powder Blush">Revlon Powder Blush</option>
+            </optgroup>
+            <optgroup label="Lip Product">
+                <option value="Wardah Exclusive Moist Lipstick">Wardah Exclusive Moist Lipstick</option>
+            </optgroup>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <select class="js-example-tokenizer js-states form-control shade" multiple="multiple" tabindex="-1" style="display: none; width: 100%">
+            <option></option>
+            <option value="Natural Putih">Natural/Putih</option>
+            <option value="Suntan Sawo Matang">Suntan/Sawo Matang</option>
+            <option value="Natural">Natural</option>
+            <option value="Light Beige">Light Beige</option>
+            <option value="TWC Beige">TWC Beige</option>
+            <option value="Strawberry Dougnout Pink">Strawberry Dougnout/Pink</option>
+            <option value="Hitam Black">Hitam/Black</option>
+            <option value="Dark Brown">Dark Brown</option>
+            <option value="Rose Bomb Pink Red">Rose Bomb/Pink Red</option>
+            <option value="Ruby Red Merah">Ruby Red/Merah</option>
+            <option value="Pink Orchid">Pink Orchid</option>
+        </select>
+      </div>
+  
+      <button type="submit" id="save_produk" class="btn btn-success mb-2">
+        Simpan
+      </button>
+
+      <button type="submit" id="rekomendasi" class="btn btn-success mb-2">
+        Rekomendasi
+      </button>
+      <div class="test"></div>
+      <div id="loader"></div>
+      <div class="response"></div>
+    </form>
+
+    <!-- jequery plugins -->
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/owl.js"></script>
+    <script src="../static/js/wow.js"></script>
+    <script src="../static/js/validation.js"></script>
+    <script src="../static/js/jquery.fancybox.js"></script>
+    <script src="../static/js/appear.js"></script>
+    <script src="../static/js/scrollbar.js"></script>
+
+    <!-- main-js -->
+    <script src="../static/js/script.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+   
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+    <script>
+    $('select').select2();
+    $('.produk').select2({
+        placeholder: "Masukkan Produk"
+    })
+    $('.shade').select2({
+        placeholder: "Masukkan Shade"
+    })
+    let selected = [];
+    function checker(value_array, input_value){
+        let prohibited = value_array;
+        for(let i = 0; i < prohibited.length; i++){
+            if(input_value.indexOf(prohibited[i]) > -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    $("#save_produk").on("click", function () {
+        let result_produk = $(".produk").val();
+        let result_shade = $(".shade").val();
+        let join_result = result_produk + ' : ' + result_shade;
+        if (result_shade && result_produk){
+            if (checker(selected, join_result) === true){
+                selected.push(join_result);
+                $(".test").append("<li>" + join_result + "</li>");
+                $('.produk').val('').trigger('change');
+                $('.shade').val('').trigger('change');
+            }
+            else {
+                alert('exist')
+            }
+        } else {
+            alert('Produk atau Shade kosong')
+        }
+    });
+
+    function create_list_recommendation(data){
+        for(let i=0; i<data['nama_mua'].length; i++){
+            $(".response").append('<div/>', data['nama_mua'][i])
+        }
+    };
+
+    $("#loader").hide();
+    $("#rekomendasi").on('click',function(){
+        if (Array.isArray(selected) && selected.length) {
+            let values = {
+                'alamat': $('.alamat').val(),
+                'harga' : $('.harga').val(),
+                'produk': selected
+            };
+            $.ajax({
+                url: "/user/rekomendasi",
+                type: "POST",
+                data: values,
+                beforeSend: function(){
+                    $("#loader").show();
+                },
+                complete: function(data){
+                    $("#loader").hide();
+                }
+            }).done(function(response){
+                for(let i=0; i<response['nama_mua'].length; i++){
+                    $(".response").append('<div/>', response['nama_mua'][i]).append('<div/>', response['alamat'][i]).append('<div/>', response['deskripsi'][i]).append('<div/>', response['rating'][i]).append('<div/>', response['jarak'][i])
+                }
+            })
+        } else {
+            alert('Data tidak boleh kosong')
+        }
+        
+    })
+
+    </script>
+  </body>
+</html>

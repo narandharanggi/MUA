@@ -1,0 +1,13 @@
+flask
+PyMySQL
+flask-sqlalchemy
+flask-wtf
+flask-login
+flask-pagination
+geopy
+pandas
+Sastrawi
+nltk
+nltk.download('punkt')
+numpy
+scikit-learn

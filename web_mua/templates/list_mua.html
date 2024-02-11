@@ -1,0 +1,149 @@
+{% extends 'base.html' %} {% block list_mua %}current{% endblock %} {% block
+content %}
+<!-- Page Title -->
+<section
+  class="page-title style-two"
+  style="background-image: url(assets/images/background/page-title.jpg)"
+>
+  <div class="auto-container">
+    <div class="content-box centred mr-0">
+      <div class="title">
+        <h1>MUA</h1>
+      </div>
+      <ul class="bread-crumb clearfix">
+        <li><a href="/user">Beranda</a></li>
+        <li>MUA</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- End Page Title -->
+
+<!-- category-section -->
+<section class="category-section centred sec-pad-2">
+  <div class="search-box">
+    <div class="input-group">
+      <div class="form-outline" data-mdb-input-init>
+        <input
+          id="search-focus"
+          type="text"
+          id="form1"
+          class="form-control"
+          onkeyup="liveSearch(this.value)"
+          placeholder="Cari"
+        />
+      </div>
+      <button type="button" class="btn btn-primary" data-mdb-ripple-init>
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+  <div class="auto-container">
+    <div class="inner-content clearfix" id="results">
+      {% for item in mua_items %}
+      <div
+        class="category-block-one wow fadeInDown animated animated"
+        data-wow-delay="00ms"
+        data-wow-duration="1500ms"
+      >
+        <div class="inner-box">
+          <div class="shape">
+            <div
+              class="shape-1"
+              style="background-image: url(assets/images/shape/shape-1.png)"
+            ></div>
+            <div
+              class="shape-2"
+              style="background-image: url(assets/images/shape/shape-2.png)"
+            ></div>
+          </div>
+          <div class="icon-box"><i class="icon-6"></i></div>
+          <h5>{{ item.nama_MUA }}</h5>
+          <span>52</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="pagination-wrapper centred">
+      <ul class="pagination clearfix">
+        {% for page_num in mua_items.iter_pages(left_edge=1, right_edge=1,
+        left_current=1, right_current=1) %} {% if page_num %} {% if
+        mua_items.page == page_num %}
+        <a
+          class="btn btn-info mb-4"
+          href="{{ url_for('user.list_mua', page=page_num) }}"
+          >{{ page_num }}</a
+        >
+        {% else %}
+        <a
+          class="btn btn-outline-info mb-4"
+          href="{{ url_for('user.list_mua', page=page_num) }}"
+          >{{ page_num }}</a
+        >
+        {% endif %} {% else %} ... {% endif %} {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- category-section end -->
+
+{% endblock %} {% block scripts %}
+<!-- jequery plugins -->
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/popper.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/owl.js"></script>
+<script src="../static/js/wow.js"></script>
+<script src="../static/js/validation.js"></script>
+<script src="../static/js/jquery.fancybox.js"></script>
+<script src="../static/js/appear.js"></script>
+<script src="../static/js/scrollbar.js"></script>
+<script src="../static/js/jquery.nice-select.min.js"></script>
+
+<!-- main-js -->
+<script src="../static/js/script.js"></script>
+
+<script>
+  const clone = $("#results").clone();
+  function liveSearch(value) {
+    value = value.trim();
+    console.log(value);
+    if (value != "") {
+      $.ajax({
+        url: "/user/search",
+        data: {
+          searchText: value,
+        },
+        dataType: "json",
+        success: function (data) {
+          let res = "";
+          console.log(data.results);
+          if (data.results.length === 0) {
+            $("#results").html("<div> Data MUA tidak ditemukan </div>");
+          } else {
+            for (i in data.results) {
+              res +=
+                '<div class="category-block-one wow fadeInDown animated animated" data-wow-delay="00ms"data-wow-duration="1500ms">\
+                            <div class="inner-box">\
+                            <div class="shape">\
+                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png)"></div>\
+                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png)"></div>\
+                            </div>\
+                            <div class="icon-box"><i class="icon-6"></i></div>\
+                            <h5>' +
+                data.results[i] +
+                "</h5>\
+                            <span>52</span>\
+                            </div>\
+                            </div>";
+            }
+            $("#results").html(res);
+          }
+        },
+      });
+    } else {
+      $("#results").html(clone);
+    }
+  }
+</script>
+{% endblock %}

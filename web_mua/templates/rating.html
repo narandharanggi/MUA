@@ -1,0 +1,267 @@
+{% extends "base.html" %} {% block menu_rating %}current{% endblock %} {% block
+content %}
+<!-- Page Title -->
+<section
+  class="page-title style-two"
+  style="background-image: url(../static/images/background/page-title.jpg)"
+>
+  <div class="auto-container">
+    <div class="content-box centred mr-0">
+      <div class="title">
+        <h1>Rating</h1>
+      </div>
+      <ul class="bread-crumb clearfix">
+        <li><a href="/user">Beranda</a></li>
+        <li>Rating</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- End Page Title -->
+
+<!-- rating-section -->
+<section class="contact-section bg-color-2">
+  <div class="auto-container container-rating">
+    <div class="nav-tab-rating">
+      <!-- Nav tabs -->
+      <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Form Rating</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="read-tab" data-toggle="tab" href="#read" role="tab" aria-controls="read" aria-selected="false">Lihat Rating</a>
+        </li>
+      </ul> -->
+
+      <!-- Tab panes -->
+      <!-- <div class="tab-content">
+        <div class="tab-pane active" id="form" role="tabpanel" aria-labelledby="form-tab">
+          {% include 'form-rating.html' %}
+        </div>
+        <div class="tab-pane" id="read" role="tabpanel" aria-labelledby="read-tab">{% include 'read-rating.html' %}</div>
+      </div> -->
+      <div class="affectedDiv">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#sectionA">Form Rating</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#sectionB">Lihat Rating</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="sectionA" class="tab-pane fade in active" role="tabpanel">
+              {% include 'form-rating.html' %}
+            </div>
+            <div id="sectionB" class="tab-pane fade" role="tabpanel">
+              {% include 'read-rating.html' %}
+            </div>
+        </div>
+    </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- rating-section end -->
+{% endblock %} {% block scripts %}
+<!-- jequery plugins -->
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/popper.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/owl.js"></script>
+<script src="../static/js/wow.js"></script>
+<script src="../static/js/validation.js"></script>
+<script src="../static/js/jquery.fancybox.js"></script>
+<script src="../static/js/appear.js"></script>
+<script src="../static/js/scrollbar.js"></script>
+<script src="../static/js/jquery.nice-select.min.js"></script>
+<script src="../static/js/product-filter.js"></script>
+
+<!-- main-js -->
+<script src="../static/js/script.js"></script>
+
+<!-- select -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+<script>
+  // select
+  $("select").select2();
+  $(".mua").select2({
+    placeholder: "Masukkan MUA",
+  });
+  $(".produk").select2({
+    placeholder: "Masukkan Produk",
+  });
+  $(".shade").select2({
+    placeholder: "Masukkan Shade",
+  });
+  // let selected = [];
+  // function checker(value_array, input_value) {
+  //   let prohibited = value_array;
+  //   for (let i = 0; i < prohibited.length; i++) {
+  //     if (input_value.indexOf(prohibited[i]) > -1) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+
+  // let clone_none_product = $(".none-product").clone;
+  // $("#save_produk").on("click", function () {
+  //   let result_produk = $(".produk").val();
+  //   let result_shade = $(".shade").val();
+  //   let join_result = result_produk + " : " + result_shade;
+  //   if (result_shade && result_produk) {
+  //     if (checker(selected, join_result) === true) {
+  //       selected.push(join_result);
+  //       $(".none-product").remove();
+  //       $(".child-product-summary").append("<li>" + join_result + "</li>");
+  //       $(".produk").val("").trigger("change");
+  //       $(".shade").val("").trigger("change");
+  //     } else {
+  //       alert("exist");
+  //     }
+  //   } else {
+  //     alert("Produk atau Shade kosong");
+  //   }
+  // });
+
+  /* 1. Visualizing things on Hover - See next part for action on click */
+  $("#stars li")
+    .on("mouseover", function () {
+      var onStar = parseInt($(this).data("value"), 10); // The star currently mouse on
+
+      // Now highlight all the stars that's not after the current hovered star
+      $(this)
+        .parent()
+        .children("li.star")
+        .each(function (e) {
+          if (e < onStar) {
+            $(this).addClass("hover");
+          } else {
+            $(this).removeClass("hover");
+          }
+        });
+    })
+    .on("mouseout", function () {
+      $(this)
+        .parent()
+        .children("li.star")
+        .each(function (e) {
+          $(this).removeClass("hover");
+        });
+    });
+
+  /* 2. Action to perform on click */
+  let rating = 0
+  $("#stars li").on("click", function () {
+    var onStar = parseInt($(this).data("value"), 10); // The star currently selected
+    rating = onStar
+    var stars = $(this).parent().children("li.star");
+    console.log(onStar)
+
+    for (i = 0; i < stars.length; i++) {
+      $(stars[i]).removeClass("selected");
+    }
+
+    for (i = 0; i < onStar; i++) {
+      $(stars[i]).addClass("selected");
+    }
+  });
+
+  let selected_mua = ""
+  $("#mua").on('change', function(){
+    let opt_selected_mua = $(this).val();
+    selected_mua = opt_selected_mua;
+    console.log(opt_selected_mua)
+  })
+
+  let selected_produk = []
+  let selected_shade = []
+  $("#save_produk").on('click', function(){
+    selected_produk.push($(".produk").val())
+    selected_shade.push($(".shade").val())
+    console.log(selected_produk)
+    console.log(selected_shade)
+  })
+
+  // Proses tambah rating
+  $("#kirim-rating").on("click", function () {
+    if (Array.isArray(selected_produk) && selected_produk.length) {
+      let values = {
+        nama_mua: selected_mua,
+        harga: $(".harga").val(),
+        produk: selected_produk,
+        shade: selected_shade,
+        rating: rating
+      };
+      $.ajax({
+        url: "/user/form-rating",
+        type: "POST",
+        data: values,
+        success: function(){
+          window.location.href = "/user/rating";
+        }
+      })
+    } else {
+      alert("Data tidak boleh kosong");
+    }
+  });
+
+  let pag = []
+  $(".btn-pag").each(function(){
+   pag.push($(this).attr('id'));
+  });
+
+  $(document).ready(function(){
+	$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+		localStorage.setItem('activeTab', $(e.target).attr('href'));
+	});
+	var activeTab = localStorage.getItem('activeTab');
+	if(activeTab){
+		$('#myTab a[href="' + activeTab + '"]').tab('show');
+	}
+});
+  // $("#paglink1").on("click", function(){
+  //   console.log($(this).val())
+  // })
+
+  // $("#paglink2").on("click", function(){
+  //   console.log($(this).val())
+  // })
+  
+  // function load_data(page){
+  //     $.ajax({
+  //       type: 'POST',
+  //       data: {
+  //         'page': page,
+  //       },
+  //       url: '/user/read-rating'
+  //     }).done(function(data){
+  //       console.log(data)
+  //       for(let i=0; i < data.length; i++){
+  //         results += "<tr>\
+  //         <td>" + data[i]['mua'] + "</td>\
+  //         <td>" + data[i]['harga'] + "</td>\
+  //         <td>" + data[i]['produk'] + "</td>\
+  //         <td>" + data[i]['shade'] + "</td>\
+  //         <td>" + data[i]['rating'] + "</td>\
+  //       </tr>"
+  //       }
+        
+  //       $("#results").html(results)
+  //     })
+  //   }
+
+  // $(document).ready(function(){
+  //   $("#read-tab").on("click", function(){
+  //     load_data()
+  //   })
+  // })
+
+  // let searchResult = function(link){
+  //   $.ajax({
+  //     type: 'POST',
+  //     url: link
+  //   }).done(function(data){
+  //     // $("#results").html(data);
+  //     console.log(data)
+  //   })
+  // }
+</script>
+{% endblock %}

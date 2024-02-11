@@ -1,0 +1,115 @@
+<div class="form-rating">
+  <div class="form-inner">
+    <h2>Form Rating</h2>
+    <div id="contact-form" class="default-form">
+      <div class="row clearfix">
+        <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+          <label>Nama MUA</label>
+          <div class="form-group">
+            <select
+              class="js-states form-control"
+              id="mua"
+              tabindex="-1"
+              style="display: none; width: 100%"
+              aria-placeholder="Masukkan MUA"
+            >
+              <option></option>
+              {% for item in mua_items %}
+              <option value="{{ item.nama_MUA }}">{{ item.nama_MUA }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+          <label>Harga</label>
+          <div class="input-group">
+            <span class="input-group-text-first">Rp</span>
+            <input
+              value=""
+              type="number"
+              class="form-control harga"
+              placeholder="Masukkan Harga"
+            />
+            <span class="input-group-text-last">.000</span>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12 form-group">
+          <label>Produk</label>
+          <div class="form-group">
+            <select
+              class="js-states form-control produk"
+              tabindex="-1"
+              style="display: none; width: 100%"
+              aria-placeholder="Masukkan Produk"
+            >
+              <option></option>
+              <optgroup label="Foundation">
+                {% for item in produk_items %}
+                <option value="{{ item.nama_produk }}">
+                  {{ item.nama_produk }}
+                </option>
+                {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12 form-group">
+          <label>Skin Color</label>
+          <div class="form-group">
+            <select
+              class="js-states form-control shade"
+              tabindex="-1"
+              style="display: none; width: 100%"
+              aria-placeholder="Masukkan Produk"
+            >
+              <option></option>
+              {% for item in produk_items %}
+              <option value="{{ item.shade }}">{{ item.shade }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" id="save_produk" class="theme-btn-one">
+            Simpan
+          </button>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+          <label>Produk yang dipilih</label>
+          <div class="card">
+            <div class="card-body product-summary">
+              <div class="child-product-summary">
+                <li class="none-product">Tidak ada produk</li>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 form-group column-rating">
+          <div class="left-rating">Rating</div>
+          <div class="rating-stars">
+            <ul id="stars">
+              <li class="star" data-value="1">
+                <i class="fa fa-solid fa-star"></i>
+              </li>
+              <li class="star" data-value="2">
+                <i class="fa fa-solid fa-star"></i>
+              </li>
+              <li class="star" data-value="3">
+                <i class="fa fa-solid fa-star"></i>
+              </li>
+              <li class="star" data-value="4">
+                <i class="fa fa-solid fa-star"></i>
+              </li>
+              <li class="star" data-value="5">
+                <i class="fa fa-solid fa-star"></i>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 form-group message-btn">
+          <button class="theme-btn-one" id="kirim-rating" type="submit">
+            Kirim
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

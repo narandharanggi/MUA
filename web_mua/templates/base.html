@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+
+    <title>MUA Recommender</title>
+
+    <!-- {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} -->
+
+    <!-- Fav Icon -->
+    <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon" />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets -->
+    <link href="../static/css/font-awesome-all.css" rel="stylesheet" />
+    <link href="../static/css/flaticon.css" rel="stylesheet" />
+    <link href="../static/css/owl.css" rel="stylesheet" />
+    <link href="../static/css/bootstrap.css" rel="stylesheet" />
+    <link href="../static/css/jquery.fancybox.min.css" rel="stylesheet" />
+    <link href="../static/css/animate.css" rel="stylesheet" />
+    <link href="../static/css/nice-select.css" rel="stylesheet" />
+    <link href="../static/css/color.css" rel="stylesheet" />
+    <link href="../static/css/style.css" rel="stylesheet" />
+    <link href="../static/css/responsive.css" rel="stylesheet" />
+    {% if request.path == url_for("user.rekomendasi") %}
+    <script
+      src="https://kit.fontawesome.com/bd2e15de2a.js"
+      crossorigin="anonymous"
+    ></script>
+    <link href="../static/multiple-select.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    {% endif %} {% if request.path == url_for("user.rating") %}
+    <script
+      src="https://kit.fontawesome.com/bd2e15de2a.js"
+      crossorigin="anonymous"
+    ></script>
+    <link href="../static/rating.css" rel="stylesheet" />
+    <link href="../static/multiple-select.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    {% endif %} {% if request.path == url_for("user.list_mua") %}
+    <link href="../static/mua-list.css" rel="stylesheet" />
+    {% endif %}
+
+    <!-- Select -->
+    <!-- <link rel="stylesheet" href="../static/css/select2.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+    /> -->
+  </head>
+
+  <!-- page wrapper -->
+  <body>
+    <div class="boxed_wrapper">
+      <!-- preloader -->
+      <div class="preloader"></div>
+      <!-- preloader -->
+
+      <!-- main header -->
+      <header class="main-header">
+        <!-- header-lower -->
+        <div class="header-lower">
+          <div class="auto-container">
+            <div class="outer-box">
+              <div class="logo-box">
+                <figure class="logo">
+                  {% if current_user.is_authenticated %} {% if current_user.role
+                  == 'admin' %}
+                  <a href="/admin"
+                    ><img src="../static/images/logo.png" alt=""
+                  /></a>
+                  {% endif %} {% if current_user.role == 'user' %}
+                  <a href="/user"
+                    ><img src="../static/images/logo.png" alt=""
+                  /></a>
+                  {% endif %} {% else %}
+                  <a href="/"><img src="../static/images/logo.png" alt="" /></a>
+                  {% endif %}
+                </figure>
+              </div>
+              <div class="menu-area">
+                <!--Mobile Navigation Toggler-->
+                <div class="mobile-nav-toggler">
+                  <i class="icon-bar"></i>
+                  <i class="icon-bar"></i>
+                  <i class="icon-bar"></i>
+                </div>
+                <nav class="main-menu navbar-expand-md navbar-light">
+                  <div
+                    class="collapse navbar-collapse show clearfix"
+                    id="navbarSupportedContent"
+                  >
+                    <ul class="navigation clearfix">
+                      {% if current_user.role == 'admin' %}
+                      <li
+                        class="{% block beranda_admin %}{% endblock %} dropdown"
+                      >
+                        <a href="/admin">Beranda</a>
+                      </li>
+                      {% elif current_user.role == 'user' %}
+                      <li
+                        class="{% block beranda_mua %}{% endblock %} dropdown"
+                      >
+                        <a href="/user">Beranda</a>
+                      </li>
+                      {% endif %} {% if current_user.role == 'admin' %}
+                      <li class="{% block menu_mua %}{% endblock %} dropdown">
+                        <a href="/admin/mua">MUA</a>
+                      </li>
+
+                      <li
+                        class="{% block menu_produk %}{% endblock %} dropdown"
+                      >
+                        <a href="/admin/produk">Produk</a>
+                      </li>
+                      {% endif %} {% if current_user.role == 'user' %}
+                      <li class="{% block list_mua %}{% endblock %} dropdown">
+                        <a href="/user/list-mua">MUA</a>
+                      </li>
+                      <li
+                        class="{% block menu_rekomendasi %}{% endblock %} dropdown"
+                      >
+                        <a href="/user/rekomendasi">Rekomendasi</a>
+                      </li>
+                      {% endif %}
+                      <li class="{% block menu_rating %}{% endblock%} dropdown">
+                        <a href="/user/rating">Rating</a>
+                      </li>
+
+                      {% if current_user.is_authenticated %}
+                      <li class="dropdown">
+                        <a href="/">{{ current_user.username }}</a>
+                        <ul>
+                          <li><a href="/user/logout">Log Out</a></li>
+                        </ul>
+                      </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </nav>
+              </div>
+              {% if current_user.is_authenticated == False %}
+              <div class="btn-box">
+                <a href="/user/sign-up" class="theme-btn-one"
+                  ><i class="icon-1"></i>Daftar</a
+                >
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!--sticky Header-->
+        <div class="sticky-header">
+          <div class="auto-container">
+            <div class="outer-box">
+              <div class="logo-box">
+                <figure class="logo">
+                  {% if current_user.is_authenticated %} {% if current_user.role
+                  == 'admin' %}
+                  <a href="/admin"
+                    ><img src="../static/images/logo.png" alt=""
+                  /></a>
+                  {% endif %} {% if current_user.role == 'user' %}
+                  <a href="/user"
+                    ><img src="../static/images/logo.png" alt=""
+                  /></a>
+                  {% endif %} {% else %}
+                  <a href="/"><img src="../static/images/logo.png" alt="" /></a>
+                  {% endif %}
+                </figure>
+              </div>
+              <div class="menu-area">
+                <nav class="main-menu clearfix">
+                  <!--Keep This Empty / Menu will come through Javascript-->
+                </nav>
+              </div>
+              {% if current_user.is_authenticated == False %}
+              <div class="btn-box">
+                <a href="/user/sign-up" class="theme-btn-one"
+                  ><i class="icon-1"></i>Daftar</a
+                >
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- main-header end -->
+
+      <!-- Mobile Menu  -->
+      <div class="mobile-menu">
+        <div class="menu-backdrop"></div>
+        <div class="close-btn"><i class="fas fa-times"></i></div>
+
+        <nav class="menu-box">
+          <div class="nav-logo">
+            <a href="index.html"
+              ><img src="assets/images/logo-2.png" alt="" title=""
+            /></a>
+          </div>
+          <div class="menu-outer">
+            <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
+          </div>
+          <div class="contact-info">
+            <h4>Contact Info</h4>
+            <ul>
+              <li>Chicago 12, Melborne City, USA</li>
+              <li><a href="tel:+8801682648101">+88 01682648101</a></li>
+              <li><a href="mailto:info@example.com">info@example.com</a></li>
+            </ul>
+          </div>
+          <div class="social-links">
+            <ul class="clearfix">
+              <li>
+                <a href="index.html"><span class="fab fa-twitter"></span></a>
+              </li>
+              <li>
+                <a href="index.html"
+                  ><span class="fab fa-facebook-square"></span
+                ></a>
+              </li>
+              <li>
+                <a href="index.html"
+                  ><span class="fab fa-pinterest-p"></span
+                ></a>
+              </li>
+              <li>
+                <a href="index.html"><span class="fab fa-instagram"></span></a>
+              </li>
+              <li>
+                <a href="index.html"><span class="fab fa-youtube"></span></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <!-- End Mobile Menu -->
+
+      {% for message in get_flashed_messages() %}
+
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+        style="margin-top: 5px"
+      >
+        <strong>{{ message }}</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% block content %}
+      <!-- Template insert here -->
+      {% endblock %}
+
+      <!-- main-footer -->
+      <footer class="main-footer">
+        <div
+          class="footer-top"
+          style="
+            background-image: url(../static/images/background/footer-1.jpg);
+          "
+        >
+          <div class="auto-container">
+            <div class="widget-section">
+              <div class="row clearfix">
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                  <div class="footer-widget logo-widget">
+                    <figure class="footer-logo">
+                      <a href="index.html"
+                        ><img src="../static/images/footer-logo.png" alt=""
+                      /></a>
+                    </figure>
+                    <div class="text">
+                      <p>
+                        Lorem ipsum dolor amet consetetur adi pisicing elit sed
+                        eiusm tempor in cididunt ut labore dolore magna aliqua
+                        enim ad minim venitam
+                      </p>
+                    </div>
+                    <ul class="social-links clearfix">
+                      <li>
+                        <a href="index.html"
+                          ><i class="fab fa-facebook-f"></i
+                        ></a>
+                      </li>
+                      <li>
+                        <a href="index.html"><i class="fab fa-twitter"></i></a>
+                      </li>
+                      <li>
+                        <a href="index.html"
+                          ><i class="fab fa-instagram"></i
+                        ></a>
+                      </li>
+                      <li>
+                        <a href="index.html"
+                          ><i class="fab fa-google-plus-g"></i
+                        ></a>
+                      </li>
+                      <li>
+                        <a href="index.html"
+                          ><i class="fab fa-linkedin-in"></i
+                        ></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                  <div class="footer-widget links-widget ml-70">
+                    <div class="widget-title">
+                      <h3>Services</h3>
+                    </div>
+                    <div class="widget-content">
+                      <ul class="links-list clearfix">
+                        <li><a href="index.html">About Us</a></li>
+                        <li><a href="index.html">Listing</a></li>
+                        <li><a href="index.html">How It Works</a></li>
+                        <li><a href="index.html">Our Services</a></li>
+                        <li><a href="index.html">Our Blog</a></li>
+                        <li><a href="index.html">Contact Us</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                  <div class="footer-widget post-widget">
+                    <div class="widget-title">
+                      <h3>Top News</h3>
+                    </div>
+                    <div class="post-inner">
+                      <div class="post">
+                        <figure class="post-thumb">
+                          <img
+                            src="../static/images/resource/footer-post-1.jpg"
+                            alt=""
+                          />
+                          <a href="blog-details.html"
+                            ><i class="fas fa-link"></i
+                          ></a>
+                        </figure>
+                        <h5>
+                          <a href="blog-details.html"
+                            >The Added Value Social Worker</a
+                          >
+                        </h5>
+                        <p>Mar 25, 2020</p>
+                      </div>
+                      <div class="post">
+                        <figure class="post-thumb">
+                          <img
+                            src="../static/images/resource/footer-post-2.jpg"
+                            alt=""
+                          />
+                          <a href="blog-details.html"
+                            ><i class="fas fa-link"></i
+                          ></a>
+                        </figure>
+                        <h5>
+                          <a href="blog-details.html">Ways to Increase Trust</a>
+                        </h5>
+                        <p>Mar 24, 2020</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                  <div class="footer-widget contact-widget">
+                    <div class="widget-title">
+                      <h3>Contacts</h3>
+                    </div>
+                    <div class="widget-content">
+                      <ul class="info-list clearfix">
+                        <li>
+                          <i class="fas fa-map-marker-alt"></i>
+                          Flat 20, Reynolds Neck, North Helenaville, FV77 8WS
+                        </li>
+                        <li>
+                          <i class="fas fa-microphone"></i>
+                          <a href="tel:23055873407">+2(305) 587-3407</a>
+                        </li>
+                        <li>
+                          <i class="fas fa-envelope"></i>
+                          <a href="mailto:info@example.com">info@example.com</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="auto-container">
+            <div class="footer-inner clearfix">
+              <div class="copyright pull-left">
+                <p>
+                  <a href="index.html">Clasifico</a> &copy; 2020 All Right
+                  Reserved
+                </p>
+              </div>
+              <ul class="footer-nav pull-right clearfix">
+                <li><a href="index.html">Terms of Service</a></li>
+                <li><a href="index.html">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <!-- main-footer end -->
+
+      <!--Scroll to top-->
+      <button class="scroll-top scroll-to-target" data-target="html">
+        <span class="far fa-long-arrow-up"></span>
+      </button>
+    </div>
+
+    {% block scripts %}{% endblock %}
+  </body>
+  <!-- End of .page_wrapper -->
+</html>

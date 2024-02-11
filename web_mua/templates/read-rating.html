@@ -1,0 +1,46 @@
+<div class="form-inner">
+  <table id="data" class="table table-striped" style="width: 100%">
+    <thead>
+      <tr>
+        <th scope="col">Nama MUA</th>
+        <th scope="col">Harga</th>
+        <th scope="col">Produk</th>
+        <th scope="col">Shade</th>
+        <th scope="col">Rating</th>
+      </tr>
+    </thead>
+
+    <tbody id="results">
+      {% for item in res_items %}
+      <tr>
+        <td>{{ item.mua['nama_MUA'] }}</td>
+        <td>{{ item.harga }}</td>
+        <td>{{ item.produk['nama_produk'] }}</td>
+        <td>{{ item.produk['shade'] }}</td>
+        <td>{{ item.rating }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="pagination-wrapper centred">
+    <ul class="pagination clearfix">
+      {% for page_num in res_items.iter_pages(left_edge=1, right_edge=1,
+      left_current=1, right_current=1) %} {% if page_num %} {% if res_items.page
+      == page_num %}
+      <a
+        class="btn btn-info mb-4"
+        href="{{ url_for('user.rating', page=page_num) }}"
+        >{{ page_num }}</a
+      >
+      {% else %}
+      <a
+        class="btn btn-outline-info mb-4"
+        id="page-link"
+        href="{{ url_for('user.rating', page=page_num) }}"
+        >{{ page_num }}</a
+      >
+      {% endif %} {% else %} ... {% endif %} {% endfor %}
+    </ul>
+  </div>
+</div>

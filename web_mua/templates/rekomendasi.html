@@ -1,0 +1,452 @@
+{% extends "base.html" %} {% block menu_rekomendasi %}current{% endblock %} {%
+block content %}
+<!-- Page Title -->
+<section
+  class="page-title style-two"
+  style="background-image: url(../static/images/background/page-title.jpg)"
+>
+  <div class="auto-container">
+    <div class="content-box centred mr-0">
+      <div class="title">
+        <h1>Rekomendasi MUA</h1>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Page Title -->
+
+<!-- category-details -->
+<section class="category-details bg-color-2">
+  <div class="auto-container">
+    <div class="row clearfix">
+      <div class="col-lg-4 col-md-12 col-sm-12 sidebar-side">
+        <div class="default-sidebar category-sidebar">
+          <div class="sidebar-search sidebar-widget">
+            <div class="widget-title">
+              <h3>Lokasi</h3>
+            </div>
+            <div class="widget-content">
+              <div class="form-group form-alamat">
+                <input
+                  value=""
+                  type="text"
+                  class="form-control alamat"
+                  placeholder="Masukkan Alamat"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="sidebar-search sidebar-widget">
+            <div class="flex-product-widget">
+              <div class="left-product-widget">
+                <div class="widget-title">
+                  <h3>Produk</h3>
+                </div>
+              </div>
+              <div class="right-product-widget">
+                <button type="submit" id="save_produk" class="theme-btn-one">
+                  Simpan
+                </button>
+              </div>
+            </div>
+            <div class="widget-content">
+              <div class="form-group">
+                <select
+                  class="js-states form-control produk"
+                  tabindex="-1"
+                  style="display: none; width: 100%"
+                  aria-placeholder="Masukkan Produk"
+                >
+                  <option></option>
+                  <optgroup label="Foundation">
+                    <option value="La tulipe cover foundation">
+                      La tulipe cover foundation
+                    </option>
+                  </optgroup>
+                  <optgroup label="Loose Powder">
+                    <option value="Wardah Lightening Loose Powder">
+                      Wardah Lightening Loose Powder
+                    </option>
+                  </optgroup>
+                  <optgroup label="Compact Powder">
+                    <option value="Mineral Botanica Two Way Cake Foundation">
+                      Mineral Botanica Two Way Cake Foundation
+                    </option>
+                  </optgroup>
+                  <optgroup label="Eye Shadow">
+                    <option
+                      value="Pinkflash PinkDessert 12 Shades Eyeshadow Palette"
+                    >
+                      Pinkflash PinkDessert 12 Shades Eyeshadow Palette
+                    </option>
+                  </optgroup>
+                  <optgroup label="Eyeliner">
+                    <option
+                      value="Maybelline Tattoo Liner 48H Liquid Pen Eyeliner"
+                    >
+                      Maybelline Tattoo Liner 48H Liquid Pen Eyeliner
+                    </option>
+                  </optgroup>
+                  <optgroup label="Eyebrow">
+                    <option value="Viva Queen Eye Brow Pencil">
+                      Viva Queen Eye Brow Pencil
+                    </option>
+                  </optgroup>
+                  <optgroup label="Mascara">
+                    <option value="Wardah EyeXpert Aqua Lash Mascara">
+                      Wardah EyeXpert Aqua Lash Mascara
+                    </option>
+                  </optgroup>
+                  <optgroup label="Blush">
+                    <option value="Revlon Powder Blush">
+                      Revlon Powder Blush
+                    </option>
+                  </optgroup>
+                  <optgroup label="Lip Product">
+                    <option value="Wardah Exclusive Moist Lipstick">
+                      Wardah Exclusive Moist Lipstick
+                    </option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <!-- <div class="form-group">
+                <select
+                  class="js-example-tokenizer js-states form-control shade"
+                  multiple="multiple"
+                  tabindex="-1"
+                  style="display: none; width: 100%"
+                >
+                  <option></option>
+                  <option value="Natural Putih">Natural/Putih</option>
+                  <option value="Suntan Sawo Matang">Suntan/Sawo Matang</option>
+                  <option value="Natural">Natural</option>
+                  <option value="Light Beige">Light Beige</option>
+                  <option value="TWC Beige">TWC Beige</option>
+                  <option value="Strawberry Dougnout Pink">
+                    Strawberry Dougnout/Pink
+                  </option>
+                  <option value="Hitam Black">Hitam/Black</option>
+                  <option value="Dark Brown">Dark Brown</option>
+                  <option value="Rose Bomb Pink Red">Rose Bomb/Pink Red</option>
+                  <option value="Ruby Red Merah">Ruby Red/Merah</option>
+                  <option value="Pink Orchid">Pink Orchid</option>
+                </select>
+              </div> -->
+
+              <div class="form-group">
+                <select
+                  class="js-states form-control skin-color"
+                  tabindex="-1"
+                  style="display: none; width: 100%"
+                  aria-placeholder="Masukkan Skin Color"
+                >
+                  <option></option>
+                  <option value="Cool">Light</option>
+                  <option value="Neutral">Medium</option>
+                  <option value="Warm">Dark</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <select
+                  class="js-states form-control skin-undertone"
+                  tabindex="-1"
+                  style="display: none; width: 100%"
+                  aria-placeholder="Masukkan Skin Undertone"
+                >
+                  <option></option>
+                  <option value="Cool">Cool</option>
+                  <option value="Neutral">Neutral</option>
+                  <option value="Warm">Warm</option>
+                </select>
+              </div>
+
+              <div class="card card-rec-summary">
+                <div class="card-body product-summary">
+                  <div class="child-product-summary">
+                    <li class="none-product">Tidak ada produk</li>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="price-filter sidebar-widget">
+            <div class="widget-title">
+              <h3>Harga</h3>
+            </div>
+            <div class="default-form">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text-first">Rp</span>
+                  <input
+                    value=""
+                    type="number"
+                    class="form-control harga"
+                    placeholder="Masukkan Harga"
+                    oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : null"
+                  />
+                  <span class="input-group-text-last">.000</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="price-filter sidebar-ok">
+            <div class="price-range">
+              <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                  <button type="submit" id="rekomendasi" class="theme-btn-one">
+                    Rekomendasi
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 content-side">
+        <div class="item-shorting clearfix"></div>
+        <div class="category-block wrapper grid browse-add">
+          <div class="grid-item feature-style-two four-column pd-0">
+            <div class="row row-product clearfix" id="product-container">
+              <div id="loader"></div>
+              <div class="response"></div>
+              <div class="col-lg-4 col-md-6 col-sm-12 feature-block">
+                <div class="feature-block-one">
+                  <div class="product-recom">
+                    <div class="inner-box">
+                      <div class="image-box">
+                        <figure class="image">
+                          <img
+                            src="assets/images/resource/feature-15.jpg"
+                            alt=""
+                          />
+                        </figure>
+                      </div>
+                      <div class="lower-content">
+                        <h4>
+                          <a
+                            href="browse-ads-details.html"
+                            id="container-nama-mua"
+                          ></a>
+                        </h4>
+                        <ul class="rating clearfix" id="rating">
+                          <!-- <li><i class="icon-17"></i></li>
+                          <li><i class="icon-17"></i></li>
+                          <li><i class="icon-17"></i></li>
+                          <li><i class="icon-17"></i></li>
+                          <li><i class="icon-17"></i></li> -->
+                          <!-- <li><a href="index.html">(32)</a></li> -->
+                        </ul>
+                        <ul class="info clearfix">
+                          <li>
+                            <i class="fas fa-map-marker-alt"></i
+                            ><span id="container-lokasi-mua"></span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="inner-box">
+                    <div class="image-box">
+                      <figure class="image">
+                        <img
+                          src="assets/images/resource/feature-7.jpg"
+                          alt=""
+                        />
+                      </figure>
+                    </div>
+                    <div class="lower-content">
+                      <h4>
+                        <a
+                          href="browse-ads-details.html"
+                          id="container-nama-mua"
+                        ></a>
+                      </h4>
+                      <ul class="rating clearfix">
+                        <li><i class="icon-17"></i></li>
+                        <li><i class="icon-17"></i></li>
+                        <li><i class="icon-17"></i></li>
+                        <li><i class="icon-17"></i></li>
+                        <li><i class="icon-17"></i></li>
+                        <li><a href="index.html">(32)</a></li>
+                      </ul>
+                      <ul class="info clearfix">
+                        <li>
+                          <i
+                            id="container-lokasi-mua"
+                            class="fas fa-map-marker-alt"
+                          ></i>
+                        </li>
+                      </ul>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- category-details end -->
+{% endblock %} {% block scripts %}
+<!-- jequery plugins -->
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/popper.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/owl.js"></script>
+<script src="../static/js/wow.js"></script>
+<script src="../static/js/validation.js"></script>
+<script src="../static/js/jquery.fancybox.js"></script>
+<script src="../static/js/appear.js"></script>
+<script src="../static/js/scrollbar.js"></script>
+<script src="../static/js/jquery.nice-select.min.js"></script>
+<script src="../static/js/product-filter.js"></script>
+
+<!-- main-js -->
+<script src="../static/js/script.js"></script>
+
+<!-- select -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+
+<script>
+  // $(function () {
+  //   $(".harga").keydown(function () {
+  //     // Save old value.
+  //     if (
+  //       !$(this).val() ||
+  //       (parseInt($(this).val()) <= 999999 && parseInt($(this).val()) >= 1)
+  //     )
+  //       $(this).data("old", $(this).val());
+  //   });
+  //   $(".harga").keyup(function () {
+  //     // Check correct, else revert back to old value.
+  //     if (
+  //       !$(this).val() ||
+  //       (parseInt($(this).val()) <= 999999 && parseInt($(this).val()) >= 1)
+  //     );
+  //     else $(this).val($(this).data("old"));
+  //   });
+  // });
+  // $("#single-select-optgroup-field").select2({
+  //   theme: "bootstrap-5",
+  //   width: $(this).data("width")
+  //     ? $(this).data("width")
+  //     : $(this).hasClass("w-100")
+  //     ? "100%"
+  //     : "style",
+  //   placeholder: $(this).data("placeholder"),
+  // });
+
+  // $(".js-example-basic-multiple").select2({
+  //   theme: "bootstrap-5",
+  // });
+
+  // select
+  $("select").select2();
+  $(".produk").select2({
+    placeholder: "Masukkan Produk",
+  });
+  $(".skin-color").select2({
+    placeholder: "Masukkan Skin Color",
+  });
+  $(".skin-undertone").select2({
+    placeholder: "Masukkan Skin Undertone",
+  });
+  let selected = [];
+  function checker(value_array, input_value) {
+    let prohibited = value_array;
+    for (let i = 0; i < prohibited.length; i++) {
+      if (input_value.indexOf(prohibited[i]) > -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  let clone_none_product = $(".none-product").clone;
+  $("#save_produk").on("click", function () {
+    let result_produk = $(".produk").val();
+    let result_skin_color = $(".skin-color").val();
+    let result_undertone = $(".skin-undertone").val();
+    let join_result =
+      result_produk + " - " + result_skin_color + " - " + result_undertone;
+    if (result_skin_color && result_produk && result_undertone) {
+      if (checker(selected, join_result) === true) {
+        selected.push(join_result);
+        $(".none-product").remove();
+        $(".child-product-summary").append("<li>" + join_result + "</li>");
+        $(".produk").val("").trigger("change");
+        $(".skin-color").val("").trigger("change");
+        $(".skin-undertone").val("").trigger("change");
+      } else {
+        alert("Data sudah ada");
+      }
+    } else {
+      alert("Data ada yang kosong");
+    }
+  });
+
+  let clone = $(".feature-block").clone();
+  $(".feature-block").remove();
+  $("#loader").hide();
+  $("#rekomendasi").on("click", function () {
+    if (Array.isArray(selected) && selected.length) {
+      let values = {
+        alamat: $(".alamat").val(),
+        harga: $(".harga").val(),
+        produk: selected,
+      };
+      $.ajax({
+        url: "/user/rekomendasi",
+        type: "POST",
+        data: values,
+        beforeSend: function () {
+          $("#loader").show();
+        },
+        complete: function (data) {
+          $("#loader").hide();
+        },
+      }).done(function (response) {
+        for (let i = 0; i < response["nama_mua"].length; i++) {
+          // $(".response")
+          //   .append("<div/>", response["nama_mua"][i])
+          //   .append("<div/>", response["alamat"][i])
+          //   .append("<div/>", response["deskripsi"][i])
+          //   .append("<div/>", response["rating"][i])
+          //   .append("<div/>", response["jarak"][i]);
+          let t_clone = clone.clone();
+          t_clone.find("#container-nama-mua").text(response["nama_mua"][i]);
+          t_clone
+            .find("#container-lokasi-mua")
+            .text(response["alamat"][i] + " (" + response["jarak"][i] + " km)");
+
+          // let tmp_rating = t_clone.find("#rating");
+          for (let j = 0; j < 5; j++) {
+            if (j < response["rating"][i]) {
+              t_clone
+                .find("#rating")
+                .append(
+                  "<li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li>"
+                );
+            } else {
+              t_clone
+                .find("#rating")
+                .append(
+                  "<li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li>"
+                );
+            }
+          }
+          // t_clone.find("#rating").append(tmp_rating);
+          $("#product-container").append(t_clone);
+        }
+      });
+    } else {
+      alert("Data tidak boleh kosong");
+    }
+  });
+</script>
+
+{% endblock %}
