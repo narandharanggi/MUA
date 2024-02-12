@@ -118,9 +118,9 @@ def rekomendasi():
             ls_deskripsi = []
             print(prediciton)
             for x in prediciton:
-                result_set = Mua.query.filter_by(nama_MUA=prediciton[0]).first()
-                ls_alamat.append(result_set.alamat)
-                ls_deskripsi.append(result_set.deskripsi)
+                result_set = Mua.query.filter_by(nama_mua=x).first()
+                ls_alamat.append(result_set.lokasi)
+                ls_deskripsi.append(result_set.detail_lokasi)
             return jsonify({'nama_mua':prediciton, 'alamat':ls_alamat, 'deskripsi':ls_deskripsi, 'rating':rating, 'jarak':distance})
         return render_template('rekomendasi.html', produk_items=produk_items)
     return render_template('error.html')
