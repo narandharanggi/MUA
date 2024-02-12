@@ -66,6 +66,19 @@
     />
     {% endif %} {% if request.path == url_for("user.list_mua") %}
     <link href="../static/mua-list.css" rel="stylesheet" />
+    {% endif %} 
+    
+    {% if request.path == url_for("admin.produk") %}
+    <script
+    src="https://kit.fontawesome.com/bd2e15de2a.js"
+    crossorigin="anonymous"
+    ></script>
+    <link href="../static/multiple-select.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
     {% endif %}
 
     <!-- Select -->
@@ -149,10 +162,12 @@
                       >
                         <a href="/user/rekomendasi">Rekomendasi</a>
                       </li>
-                      {% endif %}
+
                       <li class="{% block menu_rating %}{% endblock%} dropdown">
                         <a href="/user/rating">Rating</a>
                       </li>
+                      {% endif %}
+
 
                       {% if current_user.is_authenticated %}
                       <li class="dropdown">

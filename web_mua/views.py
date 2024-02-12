@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from .models import User, Mua, Produk
+from werkzeug.security import generate_password_hash
 from . import db
 import pandas as pd
 import os
@@ -39,7 +40,7 @@ def home():
         new_admin.email = 'admin@gmail.com'
         new_admin.username = 'admin'
         new_admin.role = 'admin'
-        new_admin.password_hash = 'scrypt:32768:8:1$hcyAoercNAlOJUCs$b1d5614d394735cb08ea3fc064c837d067a689fc8d11e4c0c79657119dc3ac57f1dd8a0d7762a3aa58e77be0d1496528ffffbb92024eb7302497800b2518b52c'
+        new_admin.password_hash = generate_password_hash('admin123')
         try:
             db.session.add(new_admin)
             db.session.commit()

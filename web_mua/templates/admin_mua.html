@@ -102,8 +102,23 @@
                                                     </div>
                             
                                                     <div class="form-group">
-                                                        <label>Alamat</label>
-                                                        {{ form.alamat }}
+                                                        <label>Lokasi</label>
+                                                        {{ form.lokasi }}
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Detail Lokasi</label>
+                                                        {{ form.detail_lokasi }}
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Latitude</label>
+                                                        {{ form.latitude }}
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Longitude</label>
+                                                        {{ form.longitude }}
                                                     </div>
                             
                                                     <div class="form-group">
@@ -127,17 +142,21 @@
                                         <thead>
                                             <tr>
                                                 <th>Nama</th>
-                                                <th>Alamat</th>
-                                                <th>Deskripsi</th>
+                                                <th>Lokasi</th>
+                                                <th>Detail Lokasi</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for item in items %}
                                             <tr>
-                                                <th>{{ item.nama_MUA }}</th>
-                                                <th>{{ item.alamat }}</th>
-                                                <th>{{ item.deskripsi }}</th>
+                                                <th>{{ item.nama_mua }}</th>
+                                                <th>{{ item.lokasi }}</th>
+                                                <th>{{ item.detail_lokasi }}</th>
+                                                <th>{{ item.latitude }}</th>
+                                                <th>{{ item.longitude }}</th>
                                                 <th>
                                                     <!-- <a href="" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{ item.id }}">Edit</a>
                                                      -->
@@ -194,12 +213,27 @@
                                                                     <input type="hidden" name="id" value="{{ item.id }}">
                                                                     <div class="form-group">
                                                                       <label>Nama MUA</label>
-                                                                      <input value="{{item.nama_MUA}}" type="text" name="nama_mua" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                      <input value="{{item.nama_mua}}" type="text" name="nama_mua" class="form-control" id="exampleFormControlInput1" placeholder="">
                                                                     </div>
                                             
                                                                     <div class="form-group">
-                                                                        <label>Alamat</label>
-                                                                        <input value="{{item.alamat}}" type="text" name="alamat" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                        <label>Lokasi</label>
+                                                                        <input value="{{item.lokasi}}" type="text" name="lokasi" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label>Detail Lokasi</label>
+                                                                        <input value="{{item.detail_lokasi}}" type="text" name="detail_lokasi" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label>Latitude</label>
+                                                                        <input value="{{item.latitude}}" type="text" name="latitude" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label>Longitude</label>
+                                                                        <input value="{{item.longitude}}" type="text" name="lokasi" class="form-control" id="exampleFormControlInput1" placeholder="">
                                                                     </div>
                                                                     <button type="submit" class="btn mb-2 theme-btn-one">Update</button>
                                                                   </form>

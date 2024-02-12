@@ -97,16 +97,20 @@
                                                 <form method="POST">
                                                     {{ form.hidden_tag() }}
                                                     <div class="form-group">
-                                                        <label>Nama Produk</label>
-                                                        {{ form.nama_produk }}
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Kategori</label>
-                                                        {{ form.kategori_produk }}
+                                                        <label>Produk Makeup</label>
+                                                        {{ form.produk_makeup }}
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Shade</label>
-                                                        {{ form.shade_produk }}
+                                                        {{ form.shade }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Skin Color</label>
+                                                        {{ form.skin_color }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Skin Undertone</label>
+                                                        {{ form.skin_undertone }}
                                                     </div>
                                                     <div class="form-group message-btn">
                                                         {{ form.add_produk(class_ = "theme-btn-one") }}
@@ -124,18 +128,20 @@
                                     <table id="data" class="table table-striped" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Nama Produk</th>
-                                                <th>Kategori</th>
+                                                <th>Produk Makeup</th>
                                                 <th>Shade</th>
+                                                <th>Skin Color</th>
+                                                <th>Skin Undertone</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for item in items %}
                                             <tr>
-                                                <th>{{ item.nama_produk }}</th>
-                                                <th>{{ item.kategori_produk }}</th>
+                                                <th>{{ item.produk_makeup }}</th>
                                                 <th>{{ item.shade }}</th>
+                                                <th>{{ item.skin_color }}</th>
+                                                <th>{{ item.skin_undertone }}</th>
                                                 <th>
                                                     <!-- <a href="" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{ item.id }}">Edit</a>
                                                      -->
@@ -157,7 +163,7 @@
                                                                     <div class="modal-body">
                                                                         <div class="form-group row">
                                                                             <label class="col-sm-12 col-form-label">Apakah ingin menghapus Produk <span
-                                                                                    style='font-weight:bold;color:red'>{{item.nama_produk}}</span>
+                                                                                    style='font-weight:bold;color:red'>{{item.produk_makeup}}</span>
                                                                                 ?</label>
     
                                                                         </div>
@@ -191,18 +197,23 @@
                                                                 <form action="{{url_for('admin.update_produk', item_id=item.id)}}" method="POST">
                                                                     <input type="hidden" name="id" value="{{ item.id }}">
                                                                     <div class="form-group">
-                                                                      <label>Nama Produk</label>
-                                                                      <input value="{{item.nama_produk}}" type="text" name="nama_produk" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                      <label>Produk Makeup</label>
+                                                                      <input value="{{item.produk_makeup}}" type="text" name="produk_makeup" class="form-control" id="exampleFormControlInput1" placeholder="">
                                                                     </div>
                                             
                                                                     <div class="form-group">
-                                                                        <label>Kategori</label>
-                                                                        <input value="{{item.kategori_produk}}" type="text" name="kategori_produk" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                        <label>Shade</label>
+                                                                        <input value="{{item.shade}}" type="text" name="shade" class="form-control" id="exampleFormControlInput1" placeholder="">
                                                                     </div>
     
                                                                     <div class="form-group">
-                                                                        <label>Shade</label>
-                                                                        <input value="{{item.shade}}" type="text" name="shade" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                        <label>Skin Color</label>
+                                                                        <input value="{{item.skin_color}}" type="text" name="skin_color" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label>Skin Undertone</label>
+                                                                        <input value="{{item.skin_undertone}}" type="text" name="skin_undertone" class="form-control" id="exampleFormControlInput1" placeholder="">
                                                                     </div>
                                             
                                                                       <button type="submit" class="btn btn-success mb-2">Update</button>
@@ -258,6 +269,9 @@
         <script src="../static/js/appear.js"></script>
         <script src="../static/js/scrollbar.js"></script>
         <script src="../static/js/jquery.nice-select.min.js"></script>
+
+        <!-- select -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
 
         <!-- main-js -->
         <script src="../static/js/script.js"></script>

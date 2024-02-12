@@ -24,12 +24,17 @@ def mua():
         items = Mua.query.paginate(page=page, per_page=5)
         if form.validate_on_submit():
             nama_mua = form.nama_mua.data
-            alamat = form.alamat.data
+            lokasi = form.lokasi.data
+            detail_lokasi = form.detail_lokasi.data
+            latitude = form.latitude.data
+            longitude = form.longitude.data
 
             new_mua = Mua()
-            new_mua.nama_MUA = nama_mua
-            new_mua.deskripsi = 'Hello'
-            new_mua.alamat = alamat
+            new_mua.nama_mua = nama_mua
+            new_mua.lokasi = lokasi
+            new_mua.detail_lokasi = detail_lokasi
+            new_mua.latitude = latitude
+            new_mua.longitude = longitude
 
             try:
                 db.session.add(new_mua)
@@ -84,8 +89,11 @@ def mua():
 def update_item(item_id):
     if current_user.role == 'admin':
         mua = Mua.query.get(item_id)
-        mua.nama_MUA = request.form.get('nama_mua', mua.nama_MUA)
-        mua.alamat = request.form.get('alamat', mua.alamat)
+        mua.nama_mua = request.form.get('nama_mua', mua.nama_mua)
+        mua.lokasi = request.form.get('lokasi', mua.lokasi)
+        mua.detail_lokasi = request.form.get('detail_lokasi', mua.detail_lokasi)
+        mua.latitude = request.form.get('latitude', mua.latitude)
+        mua.longitude = request.form.get('longitude', mua.longitude)
         db.session.commit()
         return redirect(url_for('admin.mua'))
         
@@ -114,19 +122,21 @@ def produk():
         page = request.args.get('page', 1, type=int)
         items = Produk.query.paginate(page=page, per_page=5)
         if form.validate_on_submit():
-            nama_produk = form.nama_produk.data
-            kategori_produk = form.kategori_produk.data
-            shade_produk = form.shade_produk.data
+            produk_makeup = form.produk_makeup.data
+            shade = form.shade.data
+            skin_color = form.skin_color.data
+            skin_undertone = form.skin_undertone.data
 
             new_produk = Produk()
-            new_produk.nama_produk = nama_produk
-            new_produk.kategori_produk = kategori_produk
-            new_produk.shade = shade_produk
+            new_produk.produk_makeup = produk_makeup
+            new_produk.shade = shade
+            new_produk.skin_color = skin_color
+            new_produk.skin_undertone = skin_undertone
 
             try:
                 db.session.add(new_produk)
                 db.session.commit()
-                flash(f'{nama_produk} berhasil ditambahkan')
+                flash(f'{produk_makeup} berhasil ditambahkan')
                 return redirect(url_for('admin.produk'))
             except Exception as e:
                 print(e)
@@ -141,9 +151,10 @@ def produk():
 def update_produk(item_id):
     if current_user.role == 'admin':
         produk = Produk.query.get(item_id)
-        produk.nama_produk = request.form.get('nama_produk', produk.nama_produk)
-        produk.kategori_produk = request.form.get('kategori_produk', produk.kategori_produk)
+        produk.produk_makeup = request.form.get('produk_makeup', produk.produk_makeup)
         produk.shade = request.form.get('shade', produk.shade)
+        produk.skin_color = request.form.get('skin_color', produk.skin_color)
+        produk.skin_undertone = request.form.get('skin_undertone', produk.skin_undertone)
         db.session.commit()
         return redirect(url_for('admin.produk'))
         

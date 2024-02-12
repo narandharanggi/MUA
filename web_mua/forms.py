@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailField, BooleanField, SubmitField, Form
+from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailField, SelectField, SubmitField, Form
+from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, length, NumberRange
+from .models import Produk
 
 class SignUpForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired()])
@@ -16,13 +18,17 @@ class LoginForm(FlaskForm):
 
 class MuaForm(FlaskForm):
     nama_mua = StringField('Nama MUA', validators=[DataRequired()])
-    alamat = StringField('Alamat', validators=[DataRequired()])
+    lokasi = StringField('Lokasi', validators=[DataRequired()])
+    detail_lokasi = StringField('Detail Lokasi', validators=[DataRequired()])
+    latitude = FloatField('Latitude', validators=[DataRequired()])
+    longitude = FloatField('Longitude', validators=[DataRequired()])
     add_mua = SubmitField('Tambah')
 
 class ProdukForm(FlaskForm):
-    nama_produk = StringField('Nama Produk', validators=[DataRequired()])
-    kategori_produk = StringField('Kategori', validators=[DataRequired()])
-    shade_produk = StringField('Shade Produk', validators=[DataRequired()])
+    produk_makeup = StringField('Produk Makeup', validators=[DataRequired()])
+    shade = StringField('Shade', validators=[DataRequired()])
+    skin_color = StringField('Skin Color', validators=[DataRequired()])
+    skin_undertone = StringField('Skin Undertone', validators=[DataRequired()])
     add_produk = SubmitField('Tambah')
 
 class SearchForm(FlaskForm):
