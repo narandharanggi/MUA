@@ -30,7 +30,3 @@ class ProdukForm(FlaskForm):
     skin_color = StringField('Skin Color', validators=[DataRequired()])
     skin_undertone = StringField('Skin Undertone', validators=[DataRequired()])
     add_produk = SubmitField('Tambah')
-
-class SearchForm(FlaskForm):
-    search = StringField('Cari MUA')
-    submit = SubmitField('Cari')

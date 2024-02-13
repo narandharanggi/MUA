@@ -68,9 +68,12 @@ class Rating(db.Model):
 
     def toJson(self):
         return {
-            "mua": self.fk_mua.nama_MUA,
-            "produk": self.fk_detail_produk.fk_produk.nama_produk,
-            "shade": self.fk_detail_produk.fk_shade.shade,
+            "mua": self.fk_mua.nama_mua,
+            "produk": self.fk_detail_produk.produk_makeup,
+            "shade": self.fk_detail_produk.shade,
+            "skin_color": self.fk_detail_produk.skin_color,
+            "skin_undertone": self.fk_detail_produk.skin_undertone,
             "harga": self.harga,
-            "rating": self.rating
+            "rating": self.rating,
+            "date_added": self.date_added
         }

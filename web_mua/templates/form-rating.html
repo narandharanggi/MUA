@@ -15,7 +15,7 @@
             >
               <option></option>
               {% for item in mua_items %}
-              <option value="{{ item.nama_MUA }}">{{ item.nama_MUA }}</option>
+              <option value="{{ item.nama_mua }}">{{ item.nama_mua }}</option>
               {% endfor %}
             </select>
           </div>
@@ -40,16 +40,30 @@
               class="js-states form-control produk"
               tabindex="-1"
               style="display: none; width: 100%"
-              aria-placeholder="Masukkan Produk"
+              aria-placeholder="Masukkan Nama Produk Makeup"
             >
               <option></option>
-              <optgroup label="Foundation">
-                {% for item in produk_items %}
-                <option value="{{ item.nama_produk }}">
-                  {{ item.nama_produk }}
+                {% for item in produk_makeup %}
+                <option value="{{ item[0] }}">
+                  {{ item[0] }}
                 </option>
                 {% endfor %}
-              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12 form-group">
+          <label>Shade</label>
+          <div class="form-group">
+            <select
+              class="js-states form-control shade"
+              tabindex="-1"
+              style="display: none; width: 100%"
+              aria-placeholder="Masukkan Shade"
+            >
+              <option></option>
+              {% for item in shade %}
+              <option value="{{ item[0] }}">{{ item[0] }}</option>
+              {% endfor %}
             </select>
           </div>
         </div>
@@ -57,15 +71,35 @@
           <label>Skin Color</label>
           <div class="form-group">
             <select
-              class="js-states form-control shade"
+              class="js-states form-control skin-color"
               tabindex="-1"
               style="display: none; width: 100%"
-              aria-placeholder="Masukkan Produk"
+              aria-placeholder="Masukkan Skin Color"
             >
               <option></option>
-              {% for item in produk_items %}
-              <option value="{{ item.shade }}">{{ item.shade }}</option>
-              {% endfor %}
+                {% for item in skin_color %}
+                <option value="{{ item[0] }}">
+                  {{ item[0] }}
+                </option>
+                {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12 form-group">
+          <label>Skin Undertone</label>
+          <div class="form-group">
+            <select
+              class="js-states form-control skin-undertone"
+              tabindex="-1"
+              style="display: none; width: 100%"
+              aria-placeholder="Masukkan Skin Undertone"
+            >
+              <option></option>
+                {% for item in skin_undertone %}
+                <option value="{{ item[0] }}">
+                  {{ item[0] }}
+                </option>
+                {% endfor %}
             </select>
           </div>
           <button type="submit" id="save_produk" class="theme-btn-one">

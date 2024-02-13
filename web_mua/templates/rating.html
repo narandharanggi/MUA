@@ -81,7 +81,7 @@ content %}
 <script>
   // select
   $("select").select2();
-  $(".mua").select2({
+  $("#mua").select2({
     placeholder: "Masukkan MUA",
   });
   $(".produk").select2({
@@ -89,6 +89,12 @@ content %}
   });
   $(".shade").select2({
     placeholder: "Masukkan Shade",
+  });
+  $(".skin-color").select2({
+    placeholder: "Masukkan Skin Color",
+  });
+  $(".skin-undertone").select2({
+    placeholder: "Masukkan Skin Undertone",
   });
   // let selected = [];
   // function checker(value_array, input_value) {
@@ -171,23 +177,73 @@ content %}
     console.log(opt_selected_mua)
   })
 
+  function checker(value_array, input_value) {
+    let prohibited = value_array;
+    for (let i = 0; i < prohibited.length; i++) {
+      if (input_value.indexOf(prohibited[i]) > -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   let selected_produk = []
   let selected_shade = []
-  $("#save_produk").on('click', function(){
-    selected_produk.push($(".produk").val())
-    selected_shade.push($(".shade").val())
-    console.log(selected_produk)
-    console.log(selected_shade)
-  })
+  let selected_skin_color = []
+  let selected_skin_undertone = []
+  let all_selected = []
+  let clone_none_product = $(".none-product").clone;
+  $("#save_produk").on("click", function () {
+    let sp = $(".produk").val()
+    console.log(sp)
+    selected_produk.push(sp)
+    let s = $(".shade").val()
+    console.log(s)
+    selected_shade.push(s)
+    let sc = $(".skin-color").val()
+    console.log(sc)
+    selected_skin_color.push(sc)
+    let su = $(".skin-undertone").val()
+    console.log(su)
+    selected_skin_undertone.push(su)
+    let join_result =
+      sp + " - " + s + " - " + sc + " - " + su;
+    if (sp && s && sc && su) {
+      if (checker(all_selected, join_result) === true) {
+        all_selected.push(join_result)
+        $(".none-product").remove();
+        $(".child-product-summary").append("<li>" + join_result + "</li>");
+        $(".produk").val("").trigger("change");
+        $(".skin-color").val("").trigger("change");
+        $(".skin-undertone").val("").trigger("change");
+      } else {
+        alert("Data sudah ada");
+      }
+    } else {
+      alert("Data ada yang kosong");
+    }
+  });
+
+
+  // $("#save_produk").on('click', function(){
+  //   selected_produk.push($(".produk").val())
+  //   selected_shade.push($(".shade").val())
+  //   selected_skin_color.push($(".skin_color").val())
+  //   selected_skin_undertone.push($(".skin_undertone").val())
+  //   console.log(selected_produk)
+  //   console.log(selected_shade)
+  // })
 
   // Proses tambah rating
   $("#kirim-rating").on("click", function () {
-    if (Array.isArray(selected_produk) && selected_produk.length) {
+    if (Array.isArray(all_selected) && all_selected.length) {
       let values = {
         nama_mua: selected_mua,
         harga: $(".harga").val(),
         produk: selected_produk,
         shade: selected_shade,
+        skin_color: selected_skin_color,
+        skin_undertone: selected_skin_undertone,
         rating: rating
       };
       $.ajax({

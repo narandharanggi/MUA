@@ -109,17 +109,7 @@
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing sed do eiusmod tempor incididunt labore <br />dolore magna aliqua enim.</p>
             </div>
             <div class="inner-content clearfix">
-                <div class="category-block-one wow fadeInDown animated animated" data-wow-delay="00ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-6"></i></div>
-                        <h5>Property</h5>
-                        <span>52</span>
-                    </div>
-                </div>
+                {% for item in mua_items %}
                 <div class="category-block-one wow fadeInDown animated animated" data-wow-delay="100ms" data-wow-duration="1500ms">
                     <div class="inner-box">
                         <div class="shape">
@@ -127,104 +117,16 @@
                             <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
                         </div>
                         <div class="icon-box"><i class="icon-7"></i></div>
-                        <h5>Home Appliances</h5>
+                        <h5>{{ item.nama_mua }}</h5>
                         <span>20</span>
                     </div>
                 </div>
-                <div class="category-block-one wow fadeInDown animated animated" data-wow-delay="200ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-8"></i></div>
-                        <h5>Electronics</h5>
-                        <span>35</span>
-                    </div>
-                </div>
-                <div class="category-block-one wow fadeInDown animated animated" data-wow-delay="300ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-9"></i></div>
-                        <h5>Health & Beauty</h5>
-                        <span>10</span>
-                    </div>
-                </div>
-                <div class="category-block-one wow fadeInDown animated animated" data-wow-delay="400ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-10"></i></div>
-                        <h5>Automotive</h5>
-                        <span>27</span>
-                    </div>
-                </div>
-                <div class="category-block-one wow fadeInUp animated animated" data-wow-delay="00ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-11"></i></div>
-                        <h5>Furnitures</h5>
-                        <span>52</span>
-                    </div>
-                </div>
-                <div class="category-block-one wow fadeInUp animated animated" data-wow-delay="100ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-12"></i></div>
-                        <h5>Real Estate</h5>
-                        <span>20</span>
-                    </div>
-                </div>
-                <div class="category-block-one wow fadeInUp animated animated" data-wow-delay="200ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-13"></i></div>
-                        <h5>Jobs</h5>
-                        <span>35</span>
-                    </div>
-                </div>
-                <div class="category-block-one wow fadeInUp animated animated" data-wow-delay="300ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-14"></i></div>
-                        <h5>Restaurants</h5>
-                        <span>10</span>
-                    </div>
-                </div>
-                <div class="category-block-one wow fadeInUp animated animated" data-wow-delay="400ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-15"></i></div>
-                        <h5>Others</h5>
-                        <span>27</span>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-            <div class="more-btn"><a href="index.html" class="theme-btn-one">All Categories</a></div>
+            <div class="more-btn"><a href="/user/list-mua" class="theme-btn-one">All Categories</a></div>
         </div>
     </section>
     <!-- category-section end -->
-
     {% endblock %}
 
     {% block scripts %}

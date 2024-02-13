@@ -31,10 +31,10 @@ def add_produk(data_produk):
 
 @views.route('/')
 def home():
+    mua_items = Mua.query.limit(5)
     user = User.query.filter_by(role='admin').first()
     if user:
-        print(df1)
-        return render_template('index.html')
+        return render_template('index.html', mua_items=mua_items)
     else:
         new_admin = User()
         new_admin.email = 'admin@gmail.com'
@@ -50,4 +50,4 @@ def home():
         add_mua(df1)
         add_produk(df2)
 
-        return render_template('index.html')
+        return render_template('index.html', mua_items=mua_items)

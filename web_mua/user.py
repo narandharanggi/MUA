@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, request, jsonify, url_for
 from werkzeug.security import generate_password_hash
-from .forms import LoginForm, SignUpForm, SearchForm
+from .forms import LoginForm, SignUpForm
 from .models import User, Mua, Produk, Rating
 from . import db
 from .rekomendasi_hybrid import DataPreprocessing, Recommendation
@@ -130,9 +130,15 @@ def rekomendasi():
 def rating():
     if current_user.role == 'user':
         mua_items = Mua.query
-        produk_items = Produk.query 
+        produk_makeup = Produk.query.with_entities(Produk.produk_makeup).distinct()
+        shade = Produk.query.with_entities(Produk.shade).distinct()
+        skin_color = Produk.query.with_entities(Produk.skin_color).distinct()
+        skin_undertone = Produk.query.with_entities(Produk.skin_undertone).distinct()
         page = request.args.get('page', 1, type=int)
-        res_items = Rating.query.filter_by(user_id=current_user.id).paginate(page=page, per_page=5)
+        page_items = Rating.query.filter_by(fk_username_id=current_user.id).paginate(page=page, per_page=5)
+        res_items = []
+        for i in Rating.query.filter_by(fk_username_id=current_user.id).paginate(page=page, per_page=5):
+            res_items.append(i.toJson())
         # prod = Produk.query().query().filter_by(detail_mua=res_items.id)
 
         # muaList = []
@@ -162,7 +168,7 @@ def rating():
         # # res_produk = [r for r in produk]
         # print(muaList)
         # print(produkList)       
-        return render_template('rating.html', mua_items=mua_items, produk_items=produk_items, res_items=res_items)
+        return render_template('rating.html', mua_items=mua_items, page_items=page_items, produk_makeup=produk_makeup, shade=shade, skin_color=skin_color, skin_undertone=skin_undertone, res_items=res_items)
     return render_template('error.html')
 
 # @user.route('/read-rating', methods=['GET', 'POST'])
@@ -201,50 +207,104 @@ def rating():
 def form_rating():
     if current_user.role == 'user':
         if request.method == 'POST':  
-            list_produk = request.form.getlist('produk[]')
+            list_produk_makeup = request.form.getlist('produk[]')
             list_shade = request.form.getlist('shade[]')
+            list_skin_color = request.form.getlist('skin_color[]')
+            list_skin_undertone = request.form.getlist('skin_undertone[]')
             user_id = current_user.id
-            mua = Mua.query.filter_by(nama_MUA=request.form.get('nama_mua')).first()
+            mua = Mua.query.filter_by(nama_mua=request.form.get('nama_mua')).first()
             harga = request.form.get('harga')
             rating = request.form.get('rating')
-            if len(list_produk) > 1:
-                for i in range(len(list_produk)):
+            if len(list_produk_makeup) > 1:
+                for i in range(len(list_produk_makeup)):
                     produk = Produk.query.filter(
-                        Produk.nama_produk.contains(list_produk[i]),
-                        Produk.shade.contains(list_shade[i]))
-                    new_rating = Rating()
-                    new_rating.user_id = user_id
-                    new_rating.mua_id = mua.id
-                    new_rating.produk_id = produk.id
-                    new_rating.harga = harga
-                    new_rating.rating = rating
+                        Produk.produk_makeup.contains(list_produk_makeup[i]),
+                        Produk.shade.contains(list_shade[i]),
+                        Produk.skin_color.contains(list_skin_color[i]),
+                        Produk.skin_undertone.contains(list_skin_undertone[i])).first()
+                    if produk is not None:
+                        new_rating = Rating()
+                        new_rating.fk_username_id = user_id
+                        new_rating.fk_mua_id = mua.id
+                        new_rating.fk_produk_id = produk.id
+                        new_rating.harga = harga
+                        new_rating.rating = rating
 
-                    try:
-                        db.session.add(new_rating)
+                        try:
+                            db.session.add(new_rating)
+                            db.session.commit()
+                        except Exception as e:
+                            print(e)
+                            flash('Rating tidak ditambahkan')
+                        
+                    else:
+                        new_produk = Produk()
+                        new_produk.produk_makeup = list_produk_makeup[i]
+                        new_produk.shade = list_shade[i]
+                        new_produk.skin_color = list_skin_color[i]
+                        new_produk.skin_undertone = list_skin_undertone[i]
+                        db.session.add(new_produk)
                         db.session.commit()
-                    except Exception as e:
-                        print(e)
-                        flash('Rating tidak ditambahkan')
-            else:
-                print(list_produk[0])
-                produk = Produk.query.filter(
-                        Produk.nama_produk == list_produk[0],
-                        Produk.shade == list_shade[0]).first()
-                print(produk)
-                new_rating = Rating()
-                new_rating.user_id = user_id
-                new_rating.mua_id = mua.id
-                new_rating.produk_id = produk.id
-                new_rating.harga = harga
-                new_rating.rating = rating
+                        new_produk_id = new_produk.id
 
-                try:
-                    db.session.add(new_rating)
-                    db.session.commit()
-                    return redirect(url_for('user.rating'))
-                except Exception as e:
-                    print(e)
-                    flash('Rating tidak ditambahkan')
+                        new_rating = Rating()
+                        new_rating.fk_username_id = user_id
+                        new_rating.fk_mua_id = mua.id
+                        new_rating.fk_produk_id = new_produk_id
+                        new_rating.harga = harga
+                        new_rating.rating = rating
+
+                        try:
+                            db.session.add(new_rating)
+                            db.session.commit()
+                        except Exception as e:
+                            print(e)
+                            flash('Rating tidak ditambahkan')
+            else:
+                produk = Produk.query.filter(
+                        Produk.produk_makeup == list_produk_makeup[0],
+                        Produk.skin_color == list_skin_color[0],
+                        Produk.shade == list_shade[0],
+                        Produk.skin_undertone == list_skin_undertone[0]).first()
+                if produk is not None:
+                        new_rating = Rating()
+                        new_rating.fk_username_id = user_id
+                        new_rating.fk_mua_id = mua.id
+                        new_rating.fk_produk_id = produk.id
+                        new_rating.harga = harga
+                        new_rating.rating = rating
+
+                        try:
+                            db.session.add(new_rating)
+                            db.session.commit()
+                            return redirect(url_for('user.rating'))
+                        except Exception as e:
+                            print(e)
+                            flash('Rating tidak ditambahkan')
+                else:
+                        new_produk = Produk()
+                        new_produk.produk_makeup = list_produk_makeup[0]
+                        new_produk.shade = list_shade[0]
+                        new_produk.skin_color = list_skin_color[0]
+                        new_produk.skin_undertone = list_skin_undertone[0]
+                        db.session.add(new_produk)
+                        db.session.commit()
+                        new_produk_id = new_produk.id
+
+                        new_rating = Rating()
+                        new_rating.fk_username_id = user_id
+                        new_rating.fk_mua_id = mua.id
+                        new_rating.fk_produk_id = new_produk_id
+                        new_rating.harga = harga
+                        new_rating.rating = rating
+
+                        try:
+                            db.session.add(new_rating)
+                            db.session.commit()
+                            return redirect(url_for('user.rating'))
+                        except Exception as e:
+                            print(e)
+                            flash('Rating tidak ditambahkan')
             return redirect(url_for('user.rating'))
     return render_template('error.html')
 
