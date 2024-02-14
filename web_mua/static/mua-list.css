@@ -57,3 +57,48 @@
   position: relative;
   top: 10px;
 }
+
+.mua-detail .item {
+  display: flex;
+}
+
+.mua-detail .item .lokasi {
+  width: 150px;
+  text-align: left;
+}
+
+.mua-detail .item p {
+  padding-left: 20px;
+  text-align: left;
+}
+
+.mua-detail .item .produk {
+  width: 150px;
+  padding-top: 0.75rem;
+  text-align: left;
+}
+
+.lokasi-container {
+  padding-left: 20px;
+  text-align: left;
+  margin-left: -30px;
+}
+
+h5.label-rating {
+  font-size: 15px !important;
+  padding-top: 7px;
+  padding-left: 5px;
+}
+
+.detail-rating {
+  display: flex;
+  justify-content: center;
+}
+
+.detail-rating h5 {
+  color: #c3c6d1 !important;
+}
+
+.category-block-one .inner-box:hover .detail-rating h5 {
+  color: #fff !important;
+}

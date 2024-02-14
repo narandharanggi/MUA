@@ -29,6 +29,7 @@
               type="number"
               class="form-control harga"
               placeholder="Masukkan Harga"
+              oninput="this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : null"
             />
             <span class="input-group-text-last">.000</span>
           </div>

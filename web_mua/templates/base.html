@@ -42,7 +42,13 @@
     <link href="../static/css/color.css" rel="stylesheet" />
     <link href="../static/css/style.css" rel="stylesheet" />
     <link href="../static/css/responsive.css" rel="stylesheet" />
-    {% if request.path == url_for("user.rekomendasi") %}
+    {% if request.path == url_for("user.index") %}
+    <script
+      src="https://kit.fontawesome.com/bd2e15de2a.js"
+      crossorigin="anonymous"
+    ></script>
+    <link href="../static/mua-list.css" rel="stylesheet" />
+    {% endif %}{% if request.path == url_for("user.rekomendasi") %}
     <script
       src="https://kit.fontawesome.com/bd2e15de2a.js"
       crossorigin="anonymous"
@@ -65,6 +71,10 @@
       rel="stylesheet"
     />
     {% endif %} {% if request.path == url_for("user.list_mua") %}
+    <script
+    src="https://kit.fontawesome.com/bd2e15de2a.js"
+    crossorigin="anonymous"
+    ></script>
     <link href="../static/mua-list.css" rel="stylesheet" />
     {% endif %} 
     

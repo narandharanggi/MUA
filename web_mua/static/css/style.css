@@ -1525,8 +1525,11 @@ div#mCSB_1_container {
 
 .category-block-one .inner-box {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-items: stretch;
   max-width: 210px;
-  max-height: 210px;
+  height: 190px;
   width: 100%;
   margin: 0 auto;
   background: #fff;
@@ -1535,6 +1538,11 @@ div#mCSB_1_container {
   overflow: hidden;
   box-shadow: 0px 10px 50px 0px #e4e7ee;
   transition: all 500ms ease;
+}
+
+.category-block-one .inner-box .item {
+  height: 60px;
+  padding-bottom: 30px;
 }
 
 .category-block-one .inner-box:hover {
@@ -1587,20 +1595,20 @@ div#mCSB_1_container {
   display: inline-block;
   font-size: 15px;
   font-weight: 600;
-  color: #93959e;
-  background: #f2f2f5;
-  width: 40px;
-  height: 40px;
+  /* color: #93959e; */
+  /* background: #f2f2f5; */
+  /* width: 40px;
+  height: 40px; */
   line-height: 40px;
   text-align: center;
   border-radius: 50%;
   transition: all 500ms ease;
 }
 
-.category-block-one .inner-box:hover span {
+/* .category-block-one .inner-box:hover span {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.2);
-}
+} */
 
 .category-block-one .inner-box .shape .shape-1 {
   position: absolute;

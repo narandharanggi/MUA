@@ -53,7 +53,7 @@ class Mua(db.Model):
         }
 
     def __str__(self):
-        return '<MUA %r>' % self.nama_MUA
+        return '<MUA %r>' % self.nama_mua
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)

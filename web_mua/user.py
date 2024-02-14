@@ -5,7 +5,7 @@ from .models import User, Mua, Produk, Rating
 from . import db
 from .rekomendasi_hybrid import DataPreprocessing, Recommendation
 from flask_login import login_user, login_required, logout_user, current_user
-from sqlalchemy.sql import text
+from sqlalchemy.sql import text, func
 import json
 
 user = Blueprint('user', __name__)
@@ -76,7 +76,29 @@ def log_out():
 def index():
     if current_user.role == 'user':
         mua_items = Mua.query.limit(5)
-        return render_template('index_user.html', mua_items=mua_items)
+        mua_rating = []
+        for data in mua_items:
+            print(data.to_dict())
+            rating = Rating.query.with_entities(func.floor(func.avg(Rating.rating))).filter(Rating.fk_mua_id == data.id).all()
+            pr = []
+            for j in Rating.query.filter_by(fk_mua_id = data.id).all():
+                merge = ''
+                produk = j.toJson()['produk']
+                shade = j.toJson()['shade']
+                skin_color = j.toJson()['skin_color']
+                skin_undertone = j.toJson()['skin_undertone']
+                merge += produk + '-' + shade + '-' + skin_color + '-' + skin_undertone
+                pr.append(merge)
+            p = {
+                'id' : data.id,
+                'nama_mua': data.nama_mua,
+                'lokasi': data.detail_lokasi,
+                'rating': rating[0][0],
+                'str_rating': '(' + str(rating[0][0]) + ')',
+                'produk': pr
+            }
+            mua_rating.append(p)
+        return render_template('index_user.html', mua_rating=mua_rating)
     return render_template('error.html')
 
 @user.route('/list-mua', methods=['GET', 'POST'])
@@ -85,7 +107,29 @@ def list_mua():
     if current_user.role == 'user':
         page = request.args.get('page', 1, type=int)
         mua_items = Mua.query.paginate(page=page, per_page=10)
-        return render_template('list_mua.html', mua_items=mua_items)
+        mua_rating = []
+        for data in mua_items:
+            print(data.to_dict())
+            rating = Rating.query.with_entities(func.floor(func.avg(Rating.rating))).filter(Rating.fk_mua_id == data.id).all()
+            pr = []
+            for j in Rating.query.filter_by(fk_mua_id = data.id).all():
+                merge = ''
+                produk = j.toJson()['produk']
+                shade = j.toJson()['shade']
+                skin_color = j.toJson()['skin_color']
+                skin_undertone = j.toJson()['skin_undertone']
+                merge += produk + '-' + shade + '-' + skin_color + '-' + skin_undertone
+                pr.append(merge)
+            p = {
+                'id' : data.id,
+                'nama_mua': data.nama_mua,
+                'lokasi': data.detail_lokasi,
+                'rating': rating[0][0],
+                'str_rating': '(' + str(rating[0][0]) + ')',
+                'produk': pr
+            }
+            mua_rating.append(p)
+        return render_template('list_mua.html', mua_items=mua_items, mua_rating=mua_rating)
     return render_template('error.html')
 
 @user.route('/search', methods=['GET','POST'])
