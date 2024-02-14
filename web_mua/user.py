@@ -6,6 +6,7 @@ from . import db
 from .rekomendasi_hybrid import DataPreprocessing, Recommendation
 from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.sql import text, func
+from operator import itemgetter
 import json
 
 user = Blueprint('user', __name__)
@@ -23,7 +24,7 @@ def login():
             if user.verify_password(password=password):
                 login_user(user)
                 if current_user.role == 'admin':
-                    return redirect('/admin')
+                    return redirect('/admin/mua')
                 else:
                     return redirect('/user')
             else:
@@ -75,7 +76,7 @@ def log_out():
 @login_required
 def index():
     if current_user.role == 'user':
-        mua_items = Mua.query.limit(5)
+        mua_items = Mua.query.limit(10)
         mua_rating = []
         for data in mua_items:
             print(data.to_dict())
@@ -98,6 +99,7 @@ def index():
                 'produk': pr
             }
             mua_rating.append(p)
+        mua_rating = sorted(mua_rating, key=itemgetter('rating'), reverse=True)
         return render_template('index_user.html', mua_rating=mua_rating)
     return render_template('error.html')
 
@@ -128,7 +130,7 @@ def list_mua():
                 'str_rating': '(' + str(rating[0][0]) + ')',
                 'produk': pr
             }
-            mua_rating.append(p)
+            mua_rating.append(p) 
         return render_template('list_mua.html', mua_items=mua_items, mua_rating=mua_rating)
     return render_template('error.html')
 

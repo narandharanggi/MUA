@@ -104,26 +104,72 @@
       <section class="category-section centred sec-pad">
         <div class="auto-container">
             <div class="sec-title">
-                <span>Categories</span>
-                <h2>Explore by Category</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing sed do eiusmod tempor incididunt labore <br />dolore magna aliqua enim.</p>
+                <h2>Cari MUA</h2>
             </div>
             <div class="inner-content clearfix">
-                {% for item in mua_items %}
-                <div class="category-block-one wow fadeInDown animated animated" data-wow-delay="100ms" data-wow-duration="1500ms">
-                    <div class="inner-box">
-                        <div class="shape">
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png);"></div>
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png);"></div>
-                        </div>
-                        <div class="icon-box"><i class="icon-7"></i></div>
-                        <h5>{{ item.nama_mua }}</h5>
-                        <span>20</span>
+              {% for item in mua_rating %}
+              <div
+                class="category-block-one wow fadeInDown animated animated"
+                data-wow-delay="00ms"
+                data-wow-duration="1500ms"
+              >
+                <div class="inner-box" data-toggle="modal" data-target="#myModal{{item.id}}">
+                  <div class="item"><h5>{{ item.nama_mua }}</h5></div>
+                  <div class="detail-rating">
+                    <div class="item">
+                      {% for i in range(5) %}
+                          {% if i < item.rating %}
+                            <span>
+                              <li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li>
+                            </span>
+                          {% else %}
+                            <span>
+                              <li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li>
+                            </span>
+                          {% endif %}
+                      {% endfor %}
                     </div>
+                    <h5 class="label-rating">{{ item.str_rating }}</h5> 
+                  </div>
                 </div>
-                {% endfor %}
+              </div>
+              
+              <!-- Modal -->
+              <div id="myModal{{item.id}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+        
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">{{ item.nama_mua }}</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body mua-detail">
+                      <div class="item">
+                        <div class="lokasi">Lokasi</div>
+                        <p>{{ item.lokasi }}</p>
+                      </div>
+                      <div class="item">
+                        <div class="produk">Produk</div>
+                        <div class="lokasi-container">
+                          <ul class="list-group list-group-flush">
+                            {% for p in item.produk %}           
+                            <li class="list-group-item">{{ p }}</li>  
+                            {% endfor %} 
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+        
+                </div>
+              </div>
+              {% endfor %}
             </div>
-            <div class="more-btn"><a href="/user/list-mua" class="theme-btn-one">All Categories</a></div>
+            <div class="more-btn"><a href="/user/list-mua" class="theme-btn-one">Lihat Lainnya</a></div>
         </div>
     </section>
     <!-- category-section end -->

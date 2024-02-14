@@ -5,6 +5,8 @@ from . import db
 import pandas as pd
 import os
 import re
+from sqlalchemy.sql import text, func
+from operator import itemgetter
 
 
 
@@ -87,10 +89,33 @@ def add_rating(data_rating):
         db.session.add(new_rating)
         db.session.commit()
 
-@views.route('/')
+@views.route('/', methods=['GET', 'POST'])
 def home():
-    mua_items = Mua.query.limit(5)
+    mua_items = Mua.query.limit(10)
     mua = Mua.query.first()
+    mua_rating = []
+    for data in mua_items:
+        print(data.to_dict())
+        rating = Rating.query.with_entities(func.floor(func.avg(Rating.rating))).filter(Rating.fk_mua_id == data.id).all()
+        pr = []
+        for j in Rating.query.filter_by(fk_mua_id = data.id).all():
+            merge = ''
+            produk = j.toJson()['produk']
+            shade = j.toJson()['shade']
+            skin_color = j.toJson()['skin_color']
+            skin_undertone = j.toJson()['skin_undertone']
+            merge += produk + '-' + shade + '-' + skin_color + '-' + skin_undertone
+            pr.append(merge)
+        p = {
+                'id' : data.id,
+                'nama_mua': data.nama_mua,
+                'lokasi': data.detail_lokasi,
+                'rating': rating[0][0],
+                'str_rating': '(' + str(rating[0][0]) + ')',
+                'produk': pr
+            }
+        mua_rating.append(p)
+    mua_rating = sorted(mua_rating, key=itemgetter('rating'), reverse=True) 
     user = User.query.filter_by(role='admin').first()
     rating = Rating.query.first()
     if user:
@@ -98,7 +123,7 @@ def home():
             add_mua(df1)
         if rating is None:
             add_rating(xls_rating)
-        return render_template('index.html', mua_items=mua_items)
+        return render_template('index.html', mua_rating=mua_rating)
     elif user is None:
         new_admin = User()
         new_admin.email = 'admin@gmail.com'
@@ -115,5 +140,4 @@ def home():
             add_mua(df1)
         if rating is None:
             add_rating(xls_rating)
-
-    return render_template('index.html', mua_items=mua_items)
+        return render_template('index.html', mua_rating=mua_rating)
