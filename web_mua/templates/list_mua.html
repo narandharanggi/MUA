@@ -27,18 +27,17 @@ content %}
         <input
           id="search-focus"
           type="text"
-          id="form1"
           class="form-control"
-          onkeyup="liveSearch(this.value)"
           placeholder="Cari"
         />
       </div>
-      <button type="button" class="btn btn-primary" data-mdb-ripple-init>
+      <button type="button" class="btn btn-primary" id="cari-mua" data-mdb-ripple-init>
         <i class="fas fa-search"></i>
       </button>
     </div>
   </div>
-  <div class="auto-container">
+  <div class="auto-container mua-result">
+    <div id="loader"></div>
     <div class="inner-content clearfix" id="results">
       {% for item in mua_rating %}
       <div
@@ -181,8 +180,10 @@ content %}
           </div>\
         </div>\
       </div>'
-
+  
+  $("#loader").hide();
   const clone = $("#results").clone();
+  const clone_pg = $(".pagination").clone()
   function liveSearch(value) {
     value = value.trim();
     console.log(value);
@@ -193,62 +194,93 @@ content %}
           searchText: value,
         },
         dataType: "json",
+        beforeSend: function () {
+          $("#loader").show();
+        },
+        complete: function (data) {
+          $("#loader").hide();
+        },
         success: function (data) {
           console.log(data)
           if (data.length === 0) {
             $("#results").html("<div> Data MUA tidak ditemukan </div>");
+            $(".pagination").hide()
+            $(".main-footer").hide()
           } else {
-            for (let i = 0; i < data.length; i++) {
-              let res = $(result_clone)
-              res.find("#modal-mua").attr("data-target", "#myModal" + data[i]["id"])
-              res.find("#nama-mua").append(
-                "<h5>" + data[i]["nama_mua"] + "</h5>"
-              )
-              for (let j=0; j < 5; j++){
-                if(j < data[i]["rating"]){
-                  res
-                  .find("#rating")
-                  .append(
-                    "<span><li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li></span>"
-                  );
-                } else {
-                  res
-                  .find("#rating")
-                  .append(
-                    "<span><li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li></span>"
-                  );
-                }
-              }
-              res.find(".modal-mua-content").attr("id", "myModal" + data[i]["id"])
-              res.find(".modal-header").append('<h4 class="modal-title">' + data[i]["nama_mua"] + '</h4>')
-              res.find("#item-lokasi").append('<div class="lokasi">Lokasi</div>\
-                <p>'+ data[i]["lokasi"] + '</p>')
-              for (let j = 0; j < data[i]["produk"]; j++){
-                res.find("#item-produk").append('<li class="list-group-item">'+ data[i]["produk"][j] +'</li>')
-              }
-            //   res +=
-            //     '<div class="category-block-one wow fadeInDown animated animated" data-wow-delay="00ms"data-wow-duration="1500ms">\
-            //                 <div class="inner-box">\
-            //                 <div class="shape">\
-            //                 <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png)"></div>\
-            //                 <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png)"></div>\
-            //                 </div>\
-            //                 <div class="icon-box"><i class="icon-6"></i></div>\
-            //                 <h5>' +
-            //     data.results[i] +
-            //     "</h5>\
-            //                 <span>52</span>\
-            //                 </div>\
-            //                 </div>";
-            // }
-            $("#results").html(res);
+            // for (let i = 0; i < data.length; i++) {
+            //   let res = $(result_clone)
+            //   res.find("#modal-mua").attr("data-target", "#myModal" + data[i]["id"])
+            //   res.find("#nama-mua").append(
+            //     "<h5>" + data[i]["nama_mua"] + "</h5>"
+            //   )
+            //   for (let j=0; j < 5; j++){
+            //     if(j < data[i]["rating"]){
+            //       res
+            //       .find("#rating")
+            //       .append(
+            //         "<span><li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li></span>"
+            //       );
+            //     } else {
+            //       res
+            //       .find("#rating")
+            //       .append(
+            //         "<span><li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li></span>"
+            //       );
+            //     }
+            //   }
+            //   res.find(".modal-mua-content").attr("id", "myModal" + data[i]["id"])
+            //   res.find(".modal-header").append('<h4 class="modal-title">' + data[i]["nama_mua"] + '</h4>')
+            //   res.find("#item-lokasi").append('<div class="lokasi">Lokasi</div>\
+            //     <p>'+ data[i]["lokasi"] + '</p>')
+            //   for (let j = 0; j < data[i]["produk"]; j++){
+            //     res.find("#item-produk").append('<li class="list-group-item">'+ data[i]["produk"][j] +'</li>')
+            //   }
+            // //   res +=
+            // //     '<div class="category-block-one wow fadeInDown animated animated" data-wow-delay="00ms"data-wow-duration="1500ms">\
+            // //                 <div class="inner-box">\
+            // //                 <div class="shape">\
+            // //                 <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png)"></div>\
+            // //                 <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png)"></div>\
+            // //                 </div>\
+            // //                 <div class="icon-box"><i class="icon-6"></i></div>\
+            // //                 <h5>' +
+            // //     data.results[i] +
+            // //     "</h5>\
+            // //                 <span>52</span>\
+            // //                 </div>\
+            // //                 </div>";
+            // // }
+            console.log(data)
+            $(".mua-result").children().remove()
+            $(".mua-result").append(data['htmlresponse']);
+            $(".pagination").hide()
           }
-        }
         },
       });
     } else {
       $("#results").html(clone);
+      $(".pagination").show()
     }
   }
+
+
+$( "#search-focus" ).on( "keyup", function() {
+  if($(this).val() === ''){
+    $("#results").html(clone);
+    $(".pagination").show()
+    $(".main-footer").show()
+  }
+} );
+
+  $("#cari-mua").on('click', function(){
+    liveSearch($("#search-focus").val())
+  })
+
+  $('#search-focus').keydown(function(e){
+      if(e.which == 13){
+        console.log('click')
+        $("#cari-mua").triggerHandler("click");
+      }
+  });
 </script>
 {% endblock %}

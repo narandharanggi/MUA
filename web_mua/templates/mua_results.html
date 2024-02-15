@@ -1,0 +1,83 @@
+<div class="inner-content clearfix" id="results">
+    {% for item in mua_rating %}
+    <div
+      class="category-block-one wow fadeInDown animated animated"
+      data-wow-delay="00ms"
+      data-wow-duration="1500ms"
+    >
+      <div class="inner-box" data-toggle="modal" data-target="#myModal{{item.id}}">
+        <div class="item"><h5>{{ item.nama_mua }}</h5></div>
+        <div class="detail-rating">
+          <div class="item">
+            {% for i in range(5) %}
+                {% if i < item.rating %}
+                  <span>
+                    <li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li>
+                  </span>
+                {% else %}
+                  <span>
+                    <li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li>
+                  </span>
+                {% endif %}
+            {% endfor %}
+          </div>
+          <h5 class="label-rating">{{ item.str_rating }}</h5> 
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="myModal{{item.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{ item.nama_mua }}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body mua-detail">
+            <div class="item">
+              <div class="lokasi">Lokasi</div>
+              <p>{{ item.lokasi }}</p>
+            </div>
+            <div class="item">
+              <div class="produk">Produk</div>
+              <div class="lokasi-container">
+                <ul class="list-group list-group-flush">
+                  {% for p in item.produk %}           
+                  <li class="list-group-item">{{ p }}</li>  
+                  {% endfor %} 
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="pagination-wrapper centred">
+    <ul class="pagination clearfix">
+      {% for page_num in iter_p.iter_pages(left_edge=1, right_edge=1,
+      left_current=1, right_current=1) %} {% if page_num %} {% if
+      iter_p.page == page_num %}
+      <a
+        class="btn btn-info mb-4"
+        href="{{ url_for('user.list_mua', page=page_num) }}"
+        >{{ page_num }}</a
+      >
+      {% else %}
+      <a
+        class="btn btn-outline-info mb-4"
+        href="{{ url_for('user.list_mua', page=page_num) }}"
+        >{{ page_num }}</a
+      >
+      {% endif %} {% else %} ... {% endif %} {% endfor %}
+    </ul>
+  </div>

@@ -139,6 +139,8 @@ def list_mua():
 def search():
     if current_user.role == 'user':
         results = []
+        page = request.args.get('page', 1, type=int)
+        iter_p = Mua.query.paginate(page=page, per_page=10)
         mua_items = Mua.query
         for data in mua_items:
             rating = Rating.query.with_entities(func.floor(func.avg(Rating.rating))).filter(Rating.fk_mua_id == data.id).all()
@@ -162,8 +164,10 @@ def search():
             results.append(p)
         text = request.args['searchText']
         result = [c for c in results if str(text).lower() in c["nama_mua"].lower()]
-        print(result)
-        return result
+        if result == []:
+            return jsonify([])
+        else:
+            return jsonify({'htmlresponse': render_template('mua_results.html', mua_rating=result, iter_p=iter_p)})
 
 
 @user.route('/rekomendasi', methods=['GET', 'POST'])
