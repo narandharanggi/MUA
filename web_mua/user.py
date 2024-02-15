@@ -138,14 +138,32 @@ def list_mua():
 @login_required
 def search():
     if current_user.role == 'user':
-        mua_items = Mua.query.all()
         results = []
-        for mi in mua_items:
-            results.append(mi.to_dict()['nama_mua'])
+        mua_items = Mua.query
+        for data in mua_items:
+            rating = Rating.query.with_entities(func.floor(func.avg(Rating.rating))).filter(Rating.fk_mua_id == data.id).all()
+            pr = []
+            for j in Rating.query.filter_by(fk_mua_id = data.id).all():
+                merge = ''
+                produk = j.toJson()['produk']
+                shade = j.toJson()['shade']
+                skin_color = j.toJson()['skin_color']
+                skin_undertone = j.toJson()['skin_undertone']
+                merge += produk + '-' + shade + '-' + skin_color + '-' + skin_undertone
+                pr.append(merge)
+            p = {
+                'id' : data.id,
+                'nama_mua': data.nama_mua,
+                'lokasi': data.detail_lokasi,
+                'rating': rating[0][0],
+                'str_rating': '(' + str(rating[0][0]) + ')',
+                'produk': pr
+            }
+            results.append(p)
         text = request.args['searchText']
-        result = [c for c in results if str(text).lower() in c.lower()]
+        result = [c for c in results if str(text).lower() in c["nama_mua"].lower()]
         print(result)
-        return json.dumps({"results":result})
+        return result
 
 
 @user.route('/rekomendasi', methods=['GET', 'POST'])

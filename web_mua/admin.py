@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, request, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 from .forms import MuaForm, ProdukForm
-from .models import Mua, Produk
+from .models import Mua, Produk, Rating
 from . import db
 from sqlalchemy.sql import text
 
@@ -13,6 +13,18 @@ admin = Blueprint('admin', __name__)
 def index():
     if current_user.role == 'admin':
         return render_template('index.html')
+    return render_template('error.html')
+
+@admin.route('/rating', methods=['GET', 'POST'])
+@login_required
+def rating():
+    if current_user.role == 'admin':
+        page = request.args.get('page', 1, type=int)
+        page_items = Rating.query.paginate(page=page, per_page=5)
+        res_items = []
+        for i in Rating.query.paginate(page=page, per_page=5):
+            res_items.append(i.toJson())     
+        return render_template('admin_rating.html', res_items=res_items, page_items=page_items)
     return render_template('error.html')
 
 @admin.route('/mua',methods=['GET', 'POST'])

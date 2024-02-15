@@ -19,7 +19,7 @@
     {% endif %} {% endwith %} -->
 
     <!-- Fav Icon -->
-    <link rel="icon" href="../static/images/cheek.png" type="image/x-icon" />
+    <link rel="icon" href="../static/images/logo-bar.svg" type="image/x-icon" />
 
     <!-- Google Fonts -->
     <link
@@ -116,24 +116,26 @@
                   {% if current_user.is_authenticated %} {% if current_user.role
                   == 'admin' %}
                   <a href="/admin"
-                    ><img src="../static/images/mua.svg" alt=""
+                    ><img src="../static/images/logo_mua.svg" alt=""
                   /></a>
                   {% endif %} {% if current_user.role == 'user' %}
                   <a href="/user"
-                    ><img src="../static/images/mua.svg" alt=""
+                    ><img src="../static/images/logo_mua.svg" alt=""
                   /></a>
                   {% endif %} {% else %}
-                  <a href="/"><img src="../static/images/mua.svg" alt="" /></a>
+                  <a href="/"><img src="../static/images/logo_mua.svg" alt="" /></a>
                   {% endif %}
                 </figure>
               </div>
               <div class="menu-area">
                 <!--Mobile Navigation Toggler-->
+                {% if current_user.is_authenticated %}
                 <div class="mobile-nav-toggler">
                   <i class="icon-bar"></i>
                   <i class="icon-bar"></i>
                   <i class="icon-bar"></i>
                 </div>
+                {% endif %}
                 <nav class="main-menu navbar-expand-md navbar-light">
                   <div
                     class="collapse navbar-collapse show clearfix"
@@ -157,7 +159,7 @@
                         <a href="/admin/produk">Produk</a>
                       </li>
                       <li class="dropdown">
-                        <a href="/user/rating">Rating</a>
+                        <a href="/admin/rating">Rating</a>
                       </li>
                       {% endif %} {% if current_user.role == 'user' %}
                       <li class="{% block list_mua %}{% endblock %} dropdown">
@@ -207,14 +209,14 @@
                   {% if current_user.is_authenticated %} {% if current_user.role
                     == 'admin' %}
                     <a href="/admin"
-                      ><img src="../static/images/mua.svg" alt=""
+                      ><img src="../static/images/logo_mua.svg" alt=""
                     /></a>
                   {% endif %} {% if current_user.role == 'user' %}
                     <a href="/user"
-                      ><img src="../static/images/mua.svg" alt=""
+                      ><img src="../static/images/logo_mua.svg" alt=""
                     /></a>
                   {% endif %} {% else %}
-                    <a href="/"><img src="../static/images/mua.svg" alt="" /></a>
+                    <a href="/"><img src="../static/images/logo_mua.svg" alt="" /></a>
                   {% endif %}
                 </figure>
               </div>
@@ -237,6 +239,7 @@
       <!-- main-header end -->
 
       <!-- Mobile Menu  -->
+      {% if current_user.is_authenticated == True %}
       <div class="mobile-menu">
         <div class="menu-backdrop"></div>
         <div class="close-btn"><i class="fas fa-times"></i></div>
@@ -250,39 +253,9 @@
           <div class="menu-outer">
             <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
           </div>
-          <div class="contact-info">
-            <h4>Contact Info</h4>
-            <ul>
-              <li>Chicago 12, Melborne City, USA</li>
-              <li><a href="tel:+8801682648101">+88 01682648101</a></li>
-              <li><a href="mailto:info@example.com">info@example.com</a></li>
-            </ul>
-          </div>
-          <div class="social-links">
-            <ul class="clearfix">
-              <li>
-                <a href="index.html"><span class="fab fa-twitter"></span></a>
-              </li>
-              <li>
-                <a href="index.html"
-                  ><span class="fab fa-facebook-square"></span
-                ></a>
-              </li>
-              <li>
-                <a href="index.html"
-                  ><span class="fab fa-pinterest-p"></span
-                ></a>
-              </li>
-              <li>
-                <a href="index.html"><span class="fab fa-instagram"></span></a>
-              </li>
-              <li>
-                <a href="index.html"><span class="fab fa-youtube"></span></a>
-              </li>
-            </ul>
-          </div>
         </nav>
       </div>
+      {% endif %}
       <!-- End Mobile Menu -->
 
       {% for message in get_flashed_messages() %}
@@ -322,7 +295,7 @@
 
       <!--Scroll to top-->
       <button class="scroll-top scroll-to-target" data-target="html">
-        <span class="far fa-long-arrow-up"></span>
+        <i class="fas fa-arrow-up"></i>
       </button>
     </div>
 

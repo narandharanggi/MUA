@@ -1,0 +1,120 @@
+{% extends "base.html" %} {% block menu_rating %}current{% endblock %} {% block
+  content %}
+  <!-- Page Title -->
+  <section
+    class="page-title style-two"
+    style="background-image: url(../static/images/background/rating.jpg)"
+  >
+    <div class="auto-container">
+      <div class="content-box centred mr-0">
+        <div class="title">
+          <h1>Rating</h1>
+        </div>
+        <ul class="bread-crumb clearfix">
+          <li><a href="/user">Beranda</a></li>
+          <li>Rating</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- End Page Title -->
+  
+  <!-- rating-section -->
+  <section class="contact-section bg-color-2">
+    <div class="auto-container container-rating">
+      <div class="nav-tab-rating">
+        <!-- Nav tabs -->
+        <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Form Rating</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="read-tab" data-toggle="tab" href="#read" role="tab" aria-controls="read" aria-selected="false">Lihat Rating</a>
+          </li>
+        </ul> -->
+  
+        <!-- Tab panes -->
+        <!-- <div class="tab-content">
+          <div class="tab-pane active" id="form" role="tabpanel" aria-labelledby="form-tab">
+            {% include 'form-rating.html' %}
+          </div>
+          <div class="tab-pane" id="read" role="tabpanel" aria-labelledby="read-tab">{% include 'read-rating.html' %}</div>
+        </div> -->
+        <div class="form-inner">
+          <table id="data" class="table table-striped" style="width: 100%">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 15%">Nama User</th>
+                <th scope="col" style="width: 20%">Nama MUA</th>
+                <th scope="col">Harga</th>
+                <th scope="col" style="width: 20%">Produk Makeup</th>
+                <th scope="col" style="width: 20%">Shade</th>
+                <th scope="col" style="width: 10%">Skin Color</th>
+                <th scope="col" style="width: 20%">Skin Undertone</th>
+                <th scope="col">Rating</th>
+              </tr>
+            </thead>
+        
+            <tbody id="results">
+              {% for item in res_items %}
+              <tr>
+                <td>{{ item['user'] }}</td>
+                <td>{{ item['mua'] }}</td>
+                <td>{{ item['harga'] }}</td>
+                <td>{{ item['produk'] }}</td>
+                <td>{{ item['shade'] }}</td>
+                <td>{{ item['skin_color'] }}</td>
+                <td>{{ item['skin_undertone'] }}</td>
+                <td>{{ item['rating'] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        
+          <div class="pagination-wrapper centred">
+            <ul class="pagination clearfix">
+              {% for page_num in page_items.iter_pages(left_edge=1, right_edge=1,
+              left_current=1, right_current=1) %} {% if page_num %} {% if page_items.page
+              == page_num %}
+              <a
+                class="btn btn-info mb-4"
+                href="{{ url_for('admin.rating', page=page_num) }}"
+                >{{ page_num }}</a
+              >
+              {% else %}
+              <a
+                class="btn btn-outline-info mb-4"
+                id="page-link"
+                href="{{ url_for('admin.rating', page=page_num) }}"
+                >{{ page_num }}</a
+              >
+              {% endif %} {% else %} ... {% endif %} {% endfor %}
+            </ul>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- rating-section end -->
+  {% endblock %} {% block scripts %}
+  <!-- jequery plugins -->
+  <script src="../static/js/jquery.js"></script>
+  <script src="../static/js/popper.min.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+  <script src="../static/js/owl.js"></script>
+  <script src="../static/js/wow.js"></script>
+  <script src="../static/js/validation.js"></script>
+  <script src="../static/js/jquery.fancybox.js"></script>
+  <script src="../static/js/appear.js"></script>
+  <script src="../static/js/scrollbar.js"></script>
+  <script src="../static/js/jquery.nice-select.min.js"></script>
+  <script src="../static/js/product-filter.js"></script>
+  
+  <!-- main-js -->
+  <script src="../static/js/script.js"></script>
+  
+  <!-- select -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+
+  {% endblock %}

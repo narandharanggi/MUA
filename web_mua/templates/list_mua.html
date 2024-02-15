@@ -3,7 +3,7 @@ content %}
 <!-- Page Title -->
 <section
   class="page-title style-two"
-  style="background-image: url(assets/images/background/page-title.jpg)"
+  style="background-image: url(../static/images/background/mua.jpg)"
 >
   <div class="auto-container">
     <div class="content-box centred mr-0">
@@ -142,6 +142,46 @@ content %}
 <script src="../static/js/script.js"></script>
 
 <script>
+  const result_clone = 
+    '<div\
+        class="category-block-one wow fadeInDown animated animated"\
+        data-wow-delay="00ms"\
+        data-wow-duration="1500ms"\
+      >\
+        <div class="inner-box" id="modal-mua" data-toggle="modal">\
+          <div class="item" id="nama-mua"></div>\
+          <div class="detail-rating">\
+            <div class="item" id="rating">\
+            </div>\
+            <h5 class="label-rating" id="str-rating"></h5> \
+          </div>\
+        </div>\
+      </div>\
+      <div class="modal fade modal-mua-content" role="dialog">\
+        <div class="modal-dialog">\
+          <div class="modal-content">\
+            <div class="modal-header">\
+              <button type="button" class="close" data-dismiss="modal">&times;</button>\
+            </div>\
+            <div class="modal-body mua-detail">\
+              <div class="item" id="item-lokasi">\
+                <div class="lokasi">Lokasi</div>\
+              </div>\
+              <div class="item">\
+                <div class="produk">Produk</div>\
+                <div class="lokasi-container">\
+                  <ul class="list-group list-group-flush" id="item-produk">\
+                  </ul>\
+                </div>\
+              </div>\
+            </div>\
+            <div class="modal-footer">\
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+            </div>\
+          </div>\
+        </div>\
+      </div>'
+
   const clone = $("#results").clone();
   function liveSearch(value) {
     value = value.trim();
@@ -154,29 +194,56 @@ content %}
         },
         dataType: "json",
         success: function (data) {
-          let res = "";
-          console.log(data.results);
-          if (data.results.length === 0) {
+          console.log(data)
+          if (data.length === 0) {
             $("#results").html("<div> Data MUA tidak ditemukan </div>");
           } else {
-            for (i in data.results) {
-              res +=
-                '<div class="category-block-one wow fadeInDown animated animated" data-wow-delay="00ms"data-wow-duration="1500ms">\
-                            <div class="inner-box">\
-                            <div class="shape">\
-                            <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png)"></div>\
-                            <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png)"></div>\
-                            </div>\
-                            <div class="icon-box"><i class="icon-6"></i></div>\
-                            <h5>' +
-                data.results[i] +
-                "</h5>\
-                            <span>52</span>\
-                            </div>\
-                            </div>";
-            }
+            for (let i = 0; i < data.length; i++) {
+              let res = $(result_clone)
+              res.find("#modal-mua").attr("data-target", "#myModal" + data[i]["id"])
+              res.find("#nama-mua").append(
+                "<h5>" + data[i]["nama_mua"] + "</h5>"
+              )
+              for (let j=0; j < 5; j++){
+                if(j < data[i]["rating"]){
+                  res
+                  .find("#rating")
+                  .append(
+                    "<span><li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li></span>"
+                  );
+                } else {
+                  res
+                  .find("#rating")
+                  .append(
+                    "<span><li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li></span>"
+                  );
+                }
+              }
+              res.find(".modal-mua-content").attr("id", "myModal" + data[i]["id"])
+              res.find(".modal-header").append('<h4 class="modal-title">' + data[i]["nama_mua"] + '</h4>')
+              res.find("#item-lokasi").append('<div class="lokasi">Lokasi</div>\
+                <p>'+ data[i]["lokasi"] + '</p>')
+              for (let j = 0; j < data[i]["produk"]; j++){
+                res.find("#item-produk").append('<li class="list-group-item">'+ data[i]["produk"][j] +'</li>')
+              }
+            //   res +=
+            //     '<div class="category-block-one wow fadeInDown animated animated" data-wow-delay="00ms"data-wow-duration="1500ms">\
+            //                 <div class="inner-box">\
+            //                 <div class="shape">\
+            //                 <div class="shape-1" style="background-image: url(assets/images/shape/shape-1.png)"></div>\
+            //                 <div class="shape-2" style="background-image: url(assets/images/shape/shape-2.png)"></div>\
+            //                 </div>\
+            //                 <div class="icon-box"><i class="icon-6"></i></div>\
+            //                 <h5>' +
+            //     data.results[i] +
+            //     "</h5>\
+            //                 <span>52</span>\
+            //                 </div>\
+            //                 </div>";
+            // }
             $("#results").html(res);
           }
+        }
         },
       });
     } else {

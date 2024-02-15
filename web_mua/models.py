@@ -58,6 +58,7 @@ class Mua(db.Model):
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fk_username_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    fk_username = db.relationship('User', backref='user_rating', lazy=True)
     fk_mua_id = db.Column(db.Integer, db.ForeignKey('mua.id'), nullable=False)
     fk_mua = db.relationship('Mua', backref='mua_rating', lazy=True)
     fk_produk_id = db.Column(db.Integer, db.ForeignKey('produk.id'), nullable=False)
@@ -68,6 +69,7 @@ class Rating(db.Model):
 
     def toJson(self):
         return {
+            "user": self.fk_username.username,
             "mua": self.fk_mua.nama_mua,
             "produk": self.fk_detail_produk.produk_makeup,
             "shade": self.fk_detail_produk.shade,
