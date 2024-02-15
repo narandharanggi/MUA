@@ -263,13 +263,18 @@ content %}
     }
   }
 
-
+let keyuptimer
 $( "#search-focus" ).on( "keyup", function() {
-  if($(this).val() === ''){
-    $("#results").html(clone);
-    $(".pagination").show()
-    $(".main-footer").show()
-  }
+  clearTimeout(keyuptimer);
+  keyuptimer = setTimeout(function () {
+    if($("#search-focus").val() === ''){
+      $("#results").html(clone);
+      $(".pagination").show()
+      $(".main-footer").show()
+    } else {
+      liveSearch($("#search-focus").val())
+    }
+  }, 50);
 } );
 
   $("#cari-mua").on('click', function(){
