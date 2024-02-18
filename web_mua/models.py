@@ -63,7 +63,7 @@ class Rating(db.Model):
     fk_mua = db.relationship('Mua', backref='mua_rating', lazy=True)
     fk_produk_id = db.Column(db.Integer, db.ForeignKey('produk.id'), nullable=False)
     fk_detail_produk = db.relationship('Produk', backref='produk_rating', lazy=True)
-    harga = db.Column(db.Float, nullable=False)
+    harga = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
 

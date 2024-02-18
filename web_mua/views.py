@@ -14,7 +14,7 @@ views = Blueprint('views', __name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 dir = os.path.join(basedir, 'static/Data Normalisasi 2.xlsx')
-dir_rating = os.path.join(basedir, 'static/Data MUA.xlsx')
+dir_rating = os.path.join(basedir, 'static/Data MUA 2 - Harga Asli.xlsx')
 xls = pd.ExcelFile(dir)
 df1 = pd.read_excel(xls, 'Data MUA')
 df2 = pd.read_excel(xls, 'Data Produk')
@@ -84,15 +84,37 @@ def add_rating(data_rating):
         new_rating.fk_username_id = user.id
         new_rating.fk_mua_id = mua.id
         new_rating.fk_produk_id = produk.id
-        new_rating.harga = 111
+        new_rating.harga = int(data['kategori_harga'])
         new_rating.rating = data['rating']
         db.session.add(new_rating)
         db.session.commit()
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
+    mua = Mua.query.first() 
+    user = User.query.filter_by(role='admin').first()
+    rating = Rating.query.first()
+    if user:
+        if mua is None:
+            add_mua(df1)
+        if rating is None:
+            add_rating(xls_rating)
+    elif user is None:
+        new_admin = User()
+        new_admin.email = 'admin@gmail.com'
+        new_admin.username = 'admin'
+        new_admin.role = 'admin'
+        new_admin.password_hash = generate_password_hash('admin123')
+        try:
+            db.session.add(new_admin)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+        if mua is None:
+            add_mua(df1)
+        if rating is None:
+            add_rating(xls_rating)
     mua_items = Mua.query.limit(10)
-    mua = Mua.query.first()
     mua_rating = []
     for data in mua_items:
         print(data.to_dict())
@@ -115,29 +137,5 @@ def home():
                 'produk': pr
             }
         mua_rating.append(p)
-    mua_rating = sorted(mua_rating, key=itemgetter('rating'), reverse=True) 
-    user = User.query.filter_by(role='admin').first()
-    rating = Rating.query.first()
-    if user:
-        if mua is None:
-            add_mua(df1)
-        if rating is None:
-            add_rating(xls_rating)
-        return render_template('index.html', mua_rating=mua_rating)
-    elif user is None:
-        new_admin = User()
-        new_admin.email = 'admin@gmail.com'
-        new_admin.username = 'admin'
-        new_admin.role = 'admin'
-        new_admin.password_hash = generate_password_hash('admin123')
-        try:
-            db.session.add(new_admin)
-            db.session.commit()
-        except Exception as e:
-            print(e)
-        
-        if mua_items is None:
-            add_mua(df1)
-        if rating is None:
-            add_rating(xls_rating)
-        return render_template('index.html', mua_rating=mua_rating)
+    mua_rating = sorted(mua_rating, key=itemgetter('rating'), reverse=True)
+    return render_template('index.html', mua_rating=mua_rating)

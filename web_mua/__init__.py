@@ -23,7 +23,7 @@ def create_db(host, user, password):
     cursor = db.cursor()
     
     # Executing SQL query
-    cursor.execute("CREATE DATABASE IF NOT EXISTS mua_web")
+    cursor.execute("CREATE DATABASE IF NOT EXISTS mua_hunter")
     cursor.execute("SHOW DATABASES")
     
     # Displaying databases
@@ -38,7 +38,7 @@ def create_app():
     app = Flask(__name__)
     USER = 'root'
     HOST = 'localhost'
-    DB_NAME = 'mua_web'
+    DB_NAME = 'mua_hunter'
     PASSWORD = ''
     SECRET_KEY = os.urandom(32)
     # app.config['SECRET_KEY'] = 'hbnwdvbn ajnbsjn ahe'

@@ -11,3 +11,5 @@ nltk
 numpy
 scikit-learn
 openpyxl
+certifi
+wtforms_sqlalchemy
