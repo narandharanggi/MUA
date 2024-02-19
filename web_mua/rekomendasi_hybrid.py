@@ -25,7 +25,7 @@ class Geolocation():
     def __init__(self):
         ctx = self.ssl.create_default_context(cafile=self.certifi.where())
         self.geopy.geocoders.options.default_ssl_context = ctx
-        self.geolocator = Photon(user_agent="geoapiExercises")
+        self.geolocator = Photon(user_agent="photon")
 
     def get_latitude_longitude(self, address):
         self.location = self.geolocator.geocode(address)
@@ -40,6 +40,7 @@ class DataPreprocessing():
         file_excel['desc'] = self.preprocessing(file_excel['desc'], query=False)
         file_excel = file_excel.groupby('no').agg({'nama':'first', 'nama_MUA':'first', 'kategori_harga': 'first', 'latitude':'first', 'longtitude':'first', 'rating':'first','desc':' '.join}).reset_index()
         self.data = self.kategori_numerik(file_excel, query=False)
+        self.raw_data = pd.read_excel(dir)
 
         #query from user
         self.df_query = pd.DataFrame(columns=['no', 'nama', 'nama_MUA', 'produk_makeup', 'skin_color', 'skin_undertone', 'kategori_harga', 'latitude', 'longtitude', 'rating', 'desc'])
@@ -108,12 +109,13 @@ class DataPreprocessing():
         return pre_produk
     
     def result_pepro(self):
-        return self.df_query, self.data
+        return self.df_query, self.data, self.raw_data
     
 
 class Recommendation():
-    def __init__(self, part_of_query, part_of_model, alamat):
+    def __init__(self, part_of_query, part_of_model, raw_data, alamat):
         self.data = part_of_model
+        self.raw_data = raw_data
         self.query = part_of_query
         self.location = Geolocation()
         latlg = self.location.get_latitude_longitude(alamat)
@@ -239,7 +241,10 @@ class Recommendation():
         pivot_['score'] = value_rating
         pivot_['distance'] = pivot.groupby("nama_MUA").distance.agg(['mean'])
         mua_recs = pivot_.sort_values(by=['score', 'distance'], ascending=[False, True], ignore_index=True)
-        print(mua_recs)
+        self.raw_data = self.raw_data[self.raw_data.nama.isin(list_nama)].reset_index()
+        self.raw_data = self.raw_data[['no', 'produk_makeup', 'shade', 'skin_color', 'skin_undertone']]
+        self.raw_data['desc'] = self.raw_data['produk_makeup'] + ' - ' + self.raw_data['shade'] + ' - ' + self.raw_data['skin_color'] + ' - ' + self.raw_data['skin_undertone']
+        self.raw_data = self.raw_data.groupby('no').agg({'desc': lambda x: list(x)}).reset_index()
         # for sm in range(len(mua_recs['mean_cos'])):
         #     tmp_val = math.floor(mua_recs['count'][sm] * mua_recs['mean'][sm] * mua_recs['mean_cos'][sm])
         #     if tmp_val > 5:
@@ -250,4 +255,4 @@ class Recommendation():
         # mua_recs['score'] = tmp_score
         # mua_recs = pd.DataFrame(mua_recs.to_records())
         # mua_recs = mua_recs.sort_values(by=['score', 'distance'], ascending=[False, True], ignore_index=True)
-        return mua_recs['nama_MUA'].values.tolist(), mua_recs['mean'].values.tolist(), mua_recs['distance'].values.tolist()
+        return mua_recs['nama_MUA'].values.tolist(), mua_recs['mean'].values.tolist(), mua_recs['distance'].values.tolist(), self.raw_data['desc'].to_list(), self.raw_data.index.to_list()

@@ -180,16 +180,27 @@ def rekomendasi():
             harga = request.form.get('harga')
             produk = request.form.getlist('produk[]')
             prepro = DataPreprocessing(produk, harga)
-            query, data = prepro.result_pepro()
-            prediciton, rating, distance = Recommendation(query, data, alamat).predict()
+            query, data, raw_data = prepro.result_pepro()
+            prediciton, rating, distance, product, index = Recommendation(query, data, raw_data, alamat).predict()
             ls_alamat = []
             ls_deskripsi = []
-            print(prediciton)
             for x in prediciton:
                 result_set = Mua.query.filter_by(nama_mua=x).first()
                 ls_alamat.append(result_set.lokasi)
                 ls_deskripsi.append(result_set.detail_lokasi)
-            return jsonify({'nama_mua':prediciton, 'alamat':ls_alamat, 'deskripsi':ls_deskripsi, 'rating':rating, 'jarak':distance})
+            data = []
+            for i in range(len(prediciton)):
+                mua_rec = {
+                    'nama_mua':prediciton[i],
+                    'alamat':ls_alamat[i],
+                    'deskripsi':ls_deskripsi[i],
+                    'rating':rating[i],
+                    'jarak':distance[i], 
+                    'produk':product[i],
+                    'index':index[i]
+                }
+                data.append(mua_rec)
+            return jsonify({'htmlresponse': render_template('rec_results.html', mua_rec=data)})
         return render_template('rekomendasi.html', produk_items=produk_items)
     return render_template('error.html')
 

@@ -164,82 +164,7 @@ block content %}
         <div class="item-shorting clearfix"></div>
         <div class="category-block wrapper grid browse-add">
           <div class="grid-item feature-style-two four-column pd-0">
-            <div class="row row-product clearfix" id="product-container">
-              <div id="loader"></div>
-              <div class="response"></div>
-              <div class="col-lg-4 col-md-6 col-sm-12 feature-block">
-                <div class="feature-block-one">
-                  <div class="product-recom">
-                    <div class="inner-box">
-                      <div class="image-box">
-                        <figure class="image">
-                          <img
-                            src="assets/images/resource/feature-15.jpg"
-                            alt=""
-                          />
-                        </figure>
-                      </div>
-                      <div class="lower-content">
-                        <h4>
-                          <a
-                            href="browse-ads-details.html"
-                            id="container-nama-mua"
-                          ></a>
-                        </h4>
-                        <ul class="rating clearfix" id="rating">
-                          <!-- <li><i class="icon-17"></i></li>
-                          <li><i class="icon-17"></i></li>
-                          <li><i class="icon-17"></i></li>
-                          <li><i class="icon-17"></i></li>
-                          <li><i class="icon-17"></i></li> -->
-                          <!-- <li><a href="index.html">(32)</a></li> -->
-                        </ul>
-                        <ul class="info clearfix">
-                          <li>
-                            <i class="fas fa-map-marker-alt"></i
-                            ><span id="container-lokasi-mua"></span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- <div class="inner-box">
-                    <div class="image-box">
-                      <figure class="image">
-                        <img
-                          src="assets/images/resource/feature-7.jpg"
-                          alt=""
-                        />
-                      </figure>
-                    </div>
-                    <div class="lower-content">
-                      <h4>
-                        <a
-                          href="browse-ads-details.html"
-                          id="container-nama-mua"
-                        ></a>
-                      </h4>
-                      <ul class="rating clearfix">
-                        <li><i class="icon-17"></i></li>
-                        <li><i class="icon-17"></i></li>
-                        <li><i class="icon-17"></i></li>
-                        <li><i class="icon-17"></i></li>
-                        <li><i class="icon-17"></i></li>
-                        <li><a href="index.html">(32)</a></li>
-                      </ul>
-                      <ul class="info clearfix">
-                        <li>
-                          <i
-                            id="container-lokasi-mua"
-                            class="fas fa-map-marker-alt"
-                          ></i>
-                        </li>
-                      </ul>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-            </div>
+            <div class="row row-product clearfix" id="product-container"></div>
           </div>
         </div>
       </div>
@@ -366,38 +291,39 @@ block content %}
           $("#loader").hide();
         },
       }).done(function (response) {
-        for (let i = 0; i < response["nama_mua"].length; i++) {
-          // $(".response")
-          //   .append("<div/>", response["nama_mua"][i])
-          //   .append("<div/>", response["alamat"][i])
-          //   .append("<div/>", response["deskripsi"][i])
-          //   .append("<div/>", response["rating"][i])
-          //   .append("<div/>", response["jarak"][i]);
-          let t_clone = clone.clone();
-          t_clone.find("#container-nama-mua").text(response["nama_mua"][i]);
-          t_clone
-            .find("#container-lokasi-mua")
-            .text(response["alamat"][i] + " (" + response["jarak"][i] + " km)");
+        // for (let i = 0; i < response["nama_mua"].length; i++) {
+        //   // $(".response")
+        //   //   .append("<div/>", response["nama_mua"][i])
+        //   //   .append("<div/>", response["alamat"][i])
+        //   //   .append("<div/>", response["deskripsi"][i])
+        //   //   .append("<div/>", response["rating"][i])
+        //   //   .append("<div/>", response["jarak"][i]);
+        //   let t_clone = clone.clone();
+        //   t_clone.find("#container-nama-mua").text(response["nama_mua"][i]);
+        //   t_clone
+        //     .find("#container-lokasi-mua")
+        //     .text(response["alamat"][i] + " (" + response["jarak"][i] + " km)");
 
-          // let tmp_rating = t_clone.find("#rating");
-          for (let j = 0; j < 5; j++) {
-            if (j < response["rating"][i]) {
-              t_clone
-                .find("#rating")
-                .append(
-                  "<li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li>"
-                );
-            } else {
-              t_clone
-                .find("#rating")
-                .append(
-                  "<li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li>"
-                );
-            }
-          }
-          // t_clone.find("#rating").append(tmp_rating);
-          $("#product-container").append(t_clone);
-        }
+        //   // let tmp_rating = t_clone.find("#rating");
+        //   for (let j = 0; j < 5; j++) {
+        //     if (j < response["rating"][i]) {
+        //       t_clone
+        //         .find("#rating")
+        //         .append(
+        //           "<li><i class='fa-solid fa-star' style='color: #FFD43B;'></i></li>"
+        //         );
+        //     } else {
+        //       t_clone
+        //         .find("#rating")
+        //         .append(
+        //           "<li><i class='fa-solid fa-star' style='color: #c3c6d1;'></i></li>"
+        //         );
+        //     }
+        //   }
+        //   // t_clone.find("#rating").append(tmp_rating);
+        //   $("#product-container").append(t_clone);
+        // }
+        $("#product-container").append(response["htmlresponse"]);
       });
     } else {
       alert("Data tidak boleh kosong");
