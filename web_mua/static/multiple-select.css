@@ -554,6 +554,10 @@
   align-content: space-between;
 }
 
+.flex-product-widget.bottom-product-widget {
+  padding-top: 15px;
+}
+
 .left-product-widget {
   transform: translatey(15.5%);
 }

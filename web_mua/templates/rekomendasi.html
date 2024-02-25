@@ -44,11 +44,73 @@ block content %}
                 </div>
               </div>
               <div class="right-product-widget">
-                <button type="submit" id="save_produk" class="theme-btn-one">
-                  Simpan
+                <button type="submit" id="lihat_panduan" class="theme-btn-one" data-toggle="modal" data-target="#panduan">
+                  Lihat Panduan
                 </button>
               </div>
             </div>
+
+            <!-- Modal -->
+            <!-- The Modal -->
+            <div class="modal" id="panduan">
+              <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h1 class="modal-title">Panduan</h1>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <div class="tabbable">
+                      <ul class="nav nav-tabs" role="tablist">
+                          <li class="nav-item active">
+                              <a class="nav-link active" href="#scolor" data-toggle="tab">
+                                      Skin Color
+                                  </a>
+                          </li>
+                          <li>
+                              <a class="nav-link" href="#sundertone" data-toggle="tab">
+                                      Skin Undertone
+                                  </a>
+                          </li>
+                      </ul>
+                    </div>
+
+                    <div class="tab-content" id="tab-content">
+                      <div class="tab-pane active" id="scolor">
+                        <p class="text-justify">Secara umum, ada tiga kategori skin color atau skin tone, yaitu light, medium, dan dark. Skin tone adalah warna permukaan kulit yang langsung terlihat oleh mata, warna dari kulit ini diperngaruhi oleh jumlah melanin yaitu zat pigmen yang memberi warna pada kulit dan rambut. Semakin sedikit jumlah pigmen maka semakin terang warna kulit.</p>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">Terang (Light): Warna kulit terang atau cerah cenderung secara historis berasal dari negara-negara yang sering menghadapi salju atau cuaca berawan. Orang yang lebih pucat biasanya sangat sensitif terhadap sinar matahari dan lebih mudah terbakar daripada mereka yang memiliki kulit lebih gelap.</li>
+                          <li class="list-group-item">Sedang (Medium): Kulit medium Warna kulit ini memiliki tampilan warna krem netral hingga keemasan atau warna zaitun. Kulit medium sering disebut dengan istilah tan, kuning langsat, atau sawo matang.</li>
+                          <li class="list-group-item">Gelap (Dark): Kulit gelap biasanya berasal dari bagian dunia yang paling banyak terpapar radiasi ultraviolet, seperti Timur Tengah, India, dan Afrika. </li>
+                        </ul>
+                      </div>
+                      <div class="tab-pane" id="sundertone">
+                        <p class="text-justify">Skin undertone terbagi menjadi 3 jenis, cool, warm, neutral. Skin undertone merupakan warna dasar kulit yang terdapat di bawah permukaan kulit. Meskipun skin tone dapat berubah – ubah dikarenakan faktor eksternal seperti pengaruh lingkungan dan sinar matahari, tetapi skin undertone akan tetap sama. </p>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">Cool undertone: rona kulit tampak seperti merah dan merah muda dengan sedikit corak kebiruan.</li>
+                          <li class="list-group-item">Warm undertone: rona kulit tampak seperti warna kuning, peachy, dan emas.</li>
+                          <li class="list-group-item">Neutral undertone: rona kulit tampak seperti zaitun atau campuran seimbang dari cool dan dan warm. </li>
+                        </ul>
+                        <img src="../static/images/skin_color_undertone.jpeg" class="rounded" alt="">
+                      </div>
+                    </div>
+
+                    
+                  </div>
+                  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
             <div class="widget-content">
               <div class="form-group">
                 <select
@@ -98,9 +160,9 @@ block content %}
                   aria-placeholder="Masukkan Skin Color"
                 >
                   <option></option>
-                  <option value="Cool">Light</option>
-                  <option value="Neutral">Medium</option>
-                  <option value="Warm">Dark</option>
+                  <option value="Light">Light</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Dark">Dark</option>
                 </select>
               </div>
 
@@ -123,6 +185,18 @@ block content %}
                   <div class="child-product-summary">
                     <li class="none-product">Tidak ada produk</li>
                   </div>
+                </div>
+              </div>
+
+              <div class="flex-product-widget bottom-product-widget">
+                <div class="left-product-widget">
+                  <div class="widget-title">
+                  </div>
+                </div>
+                <div class="right-product-widget">
+                  <button type="submit" id="save_produk" class="theme-btn-one">
+                    Simpan
+                  </button>
                 </div>
               </div>
             </div>
@@ -224,6 +298,10 @@ block content %}
   // $(".js-example-basic-multiple").select2({
   //   theme: "bootstrap-5",
   // });
+
+  $('#panduan').on('show.bs.modal', function (event) { 
+    $(this).find('.nav a:first').tab('show');
+  })
 
   // select
   $("select").select2();

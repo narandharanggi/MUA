@@ -1,38 +1,49 @@
-from geopy.geocoders import Photon
-from geopy.distance import great_circle
 import pandas as pd
 import regex as re
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 from nltk.tokenize import word_tokenize
 import nltk
-nltk.download('punkt')
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import LabelEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import normalize
-import statistics 
+nltk.download('punkt')
+pd.set_option('display.max_rows',None)
+import warnings
+warnings.filterwarnings('ignore')
 import os
-import math
-from sklearn.preprocessing import StandardScaler
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+# ## Data MUA for Memory Based System Recommendation
 
-class Geolocation():
-    import certifi
-    import ssl
-    import geopy.geocoders
-    def __init__(self):
-        ctx = self.ssl.create_default_context(cafile=self.certifi.where())
-        self.geopy.geocoders.options.default_ssl_context = ctx
-        self.geolocator = Photon(user_agent="photon")
+class ContentBasedFiltering:
+    def case_folding(self, text):
+        if type(text) == str:
+            text = text.lower()
+        return text
 
-    def get_latitude_longitude(self, address):
-        self.location = self.geolocator.geocode(address)
-        return (self.location.latitude, self.location.longitude)
+    def punctuation_removal(self, text):
+        if type(text) == str:
+            text = re.sub(r'[^\w\s]', '', text)
+        return text
+
+    def tokenize(self, text):
+        tokens = word_tokenize(text)
+        return tokens
+        
+    def stopwords_removal(self, text):
+        stopword_factory = StopWordRemoverFactory()
+        stopword_remover = stopword_factory.create_stop_word_remover()
+        no_stopword = stopword_remover.remove(text)
+        return no_stopword
+
+    def preprocessing(self, text):
+        text = self.case_folding(text)
+        text = self.punctuation_removal(text)
+        text = self.stopwords_removal(text)
+        return text
 
 class DataPreprocessing():
-    def __init__(self, txt, num, alamat):
+    def __init__(self, txt, num):
         #data for recommendation
         dir = os.path.join(basedir, 'static/Data MUA.xlsx')
         file_excel = pd.read_excel(dir)
@@ -40,28 +51,6 @@ class DataPreprocessing():
         file_excel['desc'] = self.preprocessing(file_excel['desc'], query=False)
         self.data = self.kategori_numerik(file_excel, query=False)
         self.raw_data = pd.read_excel(dir)
-
-        #query from user
-        self.df_query = pd.DataFrame(columns=['no', 'nama', 'nama_MUA', 'produk_makeup', 'skin_color', 'skin_undertone', 'kategori_harga', 'latitude', 'longtitude', 'rating', 'desc'])
-        pre_product = txt[0].split('-')
-        harga_val = self.kategori_numerik(file_excel, num, query=True)
-        self.df_query['kategori_harga'] = harga_val
-        produk_val = []
-        for i in range(len(pre_product)):
-            produk_val.append(self.preprocessing(pre_product[i], query=True))
-        print(produk_val)
-        self.df_query['produk_makeup'] = [produk_val[0]]
-        self.df_query['skin_color'] = [produk_val[1]]
-        self.df_query['skin_undertone'] = [produk_val[2]]
-        self.df_query['desc'] = [produk_val[0] + ' ' + produk_val[1] + ' ' + produk_val[2]]
-
-        geo = Geolocation()
-        pre_address = alamat.split(',')
-        final_address = 'Kecamatan ' + pre_address[0] + ', ' + 'Kabupaten' + pre_address[1] + ',' + pre_address[2]
-        print(final_address)
-        latlg = geo.get_latitude_longitude(final_address)
-        self.df_query['latitude'] = [latlg[0]]
-        self.df_query['longtitude'] = [latlg[1]]
 
     def case_folding(self, txt):
         self.text = txt
@@ -120,58 +109,46 @@ class DataPreprocessing():
                 text = self.case_folding(i)
                 text = self.punctuation_removal()
                 text = self.stopwords_removal()
-                pre_produk += text
+                pre_produk += ' ' + text
             return pre_produk.strip()
     
     def result_pepro(self):
-        return self.df_query, self.data, self.raw_data
+        return self.data, self.raw_data
     
+from geopy.geocoders import Photon
+class Geolocation():
+    import certifi
+    import ssl
+    import geopy.geocoders
+    def __init__(self):
+        ctx = self.ssl.create_default_context(cafile=self.certifi.where())
+        self.geopy.geocoders.options.default_ssl_context = ctx
+        self.geolocator = Photon(user_agent="photon")
+
+    def get_latitude_longitude(self, address):
+        self.location = self.geolocator.geocode(address)
+        return (self.location.latitude, self.location.longitude)
 
 class Recommendation():
-    def __init__(self, part_of_query, part_of_model, raw_data):
-        self.data = part_of_model
-        self.raw_data = raw_data
-        self.query = part_of_query
-        # dir = os.path.join(basedir, 'static/Data Normalisasi 2.xlsx')
-        # xls = pd.ExcelFile(dir)
-        # df1 = pd.read_excel(xls, 'Data MUA')
-        # latlg = df1[df1["lokasi"].str.contains(alamat)].reset_index()
-        # print(latlg)
-        # if len(latlg) != 0:
-        #     self.query['latitude'] = [latlg['latitude'][0]]
-        #     self.query['longtitude'] = [latlg['longitude'][0]]
-        # else:
-        #     self.location = Geolocation()
-        #     latlg = self.location.get_latitude_longitude('Kecamatan ' + alamat[0] + 'Kabupaten ' + alamat[1])
-        #     # print(latlg)
-        #     self.query['latitude'] = [latlg[0]]
-        #     self.query['longtitude'] = [latlg[1]]
-        # self.query_data_todict = part_of_query.to_dict('records')[0]
-        print(self.query)
-        sim, dis = self.get_numtext_content(self.query.to_dict('records')[0], self.data)
-        print(sim)
-        get_user = self.data.copy()
-        get_user['sim'] = sim
-        get_user['dis'] = dis
-        get_user['final'] = get_user['sim']/(get_user['dis'] + 1)
-        get_user = get_user.sort_values(by=['final', 'rating'], ascending=[False, False], ignore_index=True)
-        print(get_user)
-        self.query = get_user.iloc[[0]]
-        print(self.query)
+    def __init__(self, produk, alamat, tmp_harga, data_for_model, data_for_user):
+        us = self.user_input(produk, alamat, tmp_harga, data_for_model)
+        tu = self.testing_user(data_for_model, data_for_user, query=us)
+        return tu.to_dict('records')
 
-    def calculate_distance(self, query_data_todict, part_of_model):
-        loc1 = (query_data_todict['latitude'], query_data_todict['longtitude'])
-        print(loc1)
-        distance_loc = []
-        for i in range(len(part_of_model.index)):
-            loc2 = (part_of_model['latitude'][i], part_of_model['longtitude'][i])
-            print(loc2)
-            tmp = great_circle(loc1, loc2).km
-            value = math.ceil(tmp * 100) / 100
-            distance_loc.append(value)
-        return distance_loc
+    def new_data_preparation(data_for_model, data_for_user, query):
+        query_data_todict = query.to_dict('index')[0]
+        part_of_model = data_for_model.copy()
+        part_of_query = part_of_model.loc[part_of_model['nama'] == query['nama'][0]].reset_index()
+        part_of_model = part_of_model.reset_index()
+        part_of_model = part_of_model.drop(columns='index')
+        return query_data_todict, part_of_query, part_of_model
 
-    def tf_idf_vector(self, query_data_todict, part_of_model):
+
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.preprocessing import normalize
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    def tf_idf_vector(part_of_model, query_data_todict):
         copy_md = part_of_model.copy()
         md = pd.DataFrame(copy_md["desc"])
         md.loc[len(md)] = query_data_todict["desc"]
@@ -180,31 +157,36 @@ class Recommendation():
         model = X[:len(part_of_model)]
         query = X[len(part_of_model):]
         return model, query
-    
+
+    from geopy.distance import great_circle
+    import math
+    def calculate_distance(query_data_todict, part_of_model):
+            loc1 = (query_data_todict['latitude'], query_data_todict['longtitude'])
+            distance_loc = []
+            for i in range(len(part_of_model.index)):
+                loc2 = (part_of_model['latitude'][i], part_of_model['longtitude'][i])
+                tmp = great_circle(loc1, loc2).km
+                value = math.ceil(tmp * 100) / 100
+                distance_loc.append(value)
+            return distance_loc
+
+
     def get_numtext_content(self, query_data_todict, part_of_model):
-        tfidf_model, tfidf_query = self.tf_idf_vector(query_data_todict, part_of_model)
+        tfidf_model, tfidf_query = self.tf_idf_vector(part_of_model, query_data_todict)
         cos_sim = cosine_similarity(tfidf_query, tfidf_model)
         data_sim = cos_sim.reshape(-1,1)
         distance = self.calculate_distance(query_data_todict, part_of_model)
         return data_sim, distance
 
-    def get_values(self, part_of_model):
+
+    from sklearn.preprocessing import StandardScaler
+
+    def get_values(part_of_model):
         tmp_data = part_of_model[['kategori_harga','sim_final']].to_numpy()
         sim_num = cosine_similarity(tmp_data)
         sim_num = np.array([np.mean(p) for p in sim_num])
         return sim_num
 
-    def new_data_preparation(self, data_for_model, query):
-        query_data_todict = query.to_dict('index')[0]
-        print(query_data_todict)
-        # part_of_model = dm[dm.index != user].reset_index()
-        part_of_model = data_for_model.copy()
-        part_of_query = part_of_model.loc[part_of_model['nama'] == query['nama'][0]].reset_index()
-        print('poq',part_of_query)
-        # part_of_model.loc[part_of_model['nama'] == user, 'rating'] = 0
-        part_of_model = part_of_model.reset_index()
-        part_of_model = part_of_model.drop(columns='index')
-        return query_data_todict, part_of_query, part_of_model
 
     def value_of_mua(self, query_data_todict, part_of_model):
         sim, distance = self.get_numtext_content(query_data_todict, part_of_model)
@@ -218,28 +200,34 @@ class Recommendation():
         part_of_model["sim_num"] = sim_num
         part_of_model = part_of_model.sort_values(by=['nama_MUA'])
         nama_mua = part_of_model["nama_MUA"].unique()
-        # value_mua = np.empty(len(nama_mua), dtype=float)
-        # for i in range(len(nama_mua)):
-        #     tmp_val = []
-        #     for j in range(len(part_of_model.index)):
-        #         if nama_mua[i] == part_of_model.nama_MUA[j]:
-        #             tmp_val.append(part_of_model["sim_final"][j])
-        #     value_mua[i] = np.mean(tmp_val)
-        # part_of_model = part_of_model.reset_index()
-        # part_of_model = part_of_model.drop(columns='index')
-        return nama_mua, part_of_model
-    
-    def rescale(self, val, in_min, in_max, out_min, out_max):
-        return out_min + (val - in_min) * ((out_max - out_min) / (in_max - in_min))
+        value_mua = np.empty(len(nama_mua), dtype=float)
+        for i in range(len(nama_mua)):
+            tmp_val = []
+            for j in range(len(part_of_model.index)):
+                if nama_mua[i] == part_of_model.nama_MUA[j]:
+                    tmp_val.append(part_of_model["sim_num"][j] * part_of_model["sim_final"][j])
+            value_mua[i] = np.mean(tmp_val)
+        part_of_model = part_of_model.reset_index()
+        part_of_model = part_of_model.drop(columns='index')
+        return nama_mua, value_mua, part_of_model
 
-    def predict(self):
-        query_data_todict, part_of_query, part_of_model = self.new_data_preparation(self.data, self.query)
-        nama_mua, part_of_model = self.value_of_mua(query_data_todict, part_of_model)
+
+    # ## HYBRID FILTERING
+
+
+    from sklearn.neighbors import NearestNeighbors
+    from sklearn.metrics import mean_squared_error, mean_absolute_error
+    from sklearn import preprocessing as pre
+    import statistics 
+
+
+    def testing_user(self, data_for_model, data_for_user, query=None, index_usr=False):
+        query_data_todict, part_of_query, part_of_model = self.new_data_preparation(data_for_model, data_for_user, query)
+        nama_mua, value_mua, part_of_model = self.value_of_mua(query_data_todict, part_of_model)
         pivot = pd.pivot_table(part_of_model, columns='nama_MUA', index='nama', values='rating', aggfunc='mean', fill_value=0)
         col_model = pivot.columns.tolist()
         val_model = np.array(pivot.values.tolist(), dtype=float)
         nama_user = np.array(pivot.index.tolist())
-        print(part_of_query)
         pivot_query = pd.pivot_table(part_of_query, columns='nama_MUA', index='nama', values='rating', aggfunc='mean', fill_value=0)
         val_query = pivot_query.values.tolist()
         col_query = pivot_query.columns.tolist()
@@ -257,19 +245,20 @@ class Recommendation():
                 if part_of_model["nama"][i] == nama_user[j]:
                     weight_user[i] = cos_sim_user[0][j]
             
-        # weight_content = np.empty(len(part_of_model), dtype=float)
-        # for i in range(len(part_of_model)):
-        #     for j in range(len(nama_mua)):
-        #         if part_of_model["nama_MUA"][i] == nama_mua[j]:
-        #             weight_content[i] = value_mua[j]
+        weight_content = np.empty(len(part_of_model), dtype=float)
+        for i in range(len(part_of_model)):
+            for j in range(len(nama_mua)):
+                if part_of_model["nama_MUA"][i] == nama_mua[j]:
+                    weight_content[i] = value_mua[j]
             
         final_res = part_of_model.copy()
         final_res = final_res[['nama', 'nama_MUA']]
         final_res['user'] = weight_user
+        final_res['content'] = weight_content
 
         mean_weight = np.zeros(len(part_of_model), dtype=float)
         for i in range(len(part_of_model)):
-            mean_weight[i] = part_of_model['sim_final'][i] * part_of_model['rating'][i] * final_res['user'][i]
+            mean_weight[i] = statistics.mean([weight_user[i],  weight_content[i]]) 
         final_res['mean_'] = mean_weight
         final_res = final_res.sort_values(by=['mean_'], ignore_index=True, ascending=False)
         get_user = final_res.groupby("nama").mean_.agg(["mean"])
@@ -279,18 +268,53 @@ class Recommendation():
         pivot = pivot[pivot.nama.isin(list_nama)].reset_index()
         pivot_ = pivot.groupby("nama_MUA").rating.agg(['count','mean'])
         pivot_['weight'] = pivot.groupby("nama_MUA").mean_.agg(['mean'])
-        for i in range(len(pivot_['weight'])):
-            pivot_['weight'][i] = self.rescale(pivot_['weight'][i], min(pivot_['weight']), max(pivot_['weight']), 1, 5)
+        value_rating = np.zeros(len(pivot_.index), dtype=float)
+        for i in range(len(pivot_.index)):
+            if pivot_['weight'][i] != 0.0:
+                value_rating[i] = pivot_["mean"][i] * pivot_['weight'][i]
+            else:
+                value_rating[i] = weight_content[i]
         distance = pivot[['nama_MUA','distance']]
         produk = pivot[['nama_MUA', 'sim']]
         final_ = pivot[['nama_MUA', 'sim_num']]
         desc = pivot[['nama_MUA', 'produk_makeup', 'shade', 'skin_color', 'skin_undertone']]
         desc['desc'] = desc['produk_makeup'] + ' - ' + desc['shade'] + ' - ' + desc['skin_color'] + ' - ' + desc['skin_undertone']
+        pivot_ = pivot.groupby("nama_MUA").rating.agg(['count','mean'])
         pivot_['nama_MUA'] = desc.groupby('nama_MUA').first().index.to_list()
+        pivot_['weight'] = pivot.groupby("nama_MUA").mean_.agg(['mean'])
+        pivot_['score'] = value_rating
         pivot_['desc'] = desc.groupby('nama_MUA').agg({'desc': lambda x: list(x)}).reset_index()['desc'].values
         pivot_['distance'] = distance.groupby("nama_MUA").distance.agg(['mean'])
         pivot_['sim'] = produk.groupby("nama_MUA").sim.agg(['mean'])
         pivot_['sim_final'] = final_.groupby("nama_MUA").sim_num.agg(['mean'])
-        pivot_ = pivot_.sort_values(by=['weight'], ignore_index=True, ascending=False)
-        print(pivot_)
-        return pivot_['nama_MUA'].values.tolist(), pivot_['mean'].values.tolist(), pivot_['distance'].values.tolist(), pivot_['desc'].values.tolist(), pivot_.index.to_list()
+        pivot_ = pivot_.sort_values(by=['score'], ignore_index=True, ascending=False)
+        return pivot_
+
+    def user_input(self, product, address, data_for_model):
+        column_data = data_for_model.columns
+        pre_product = product.split('-')
+        empty_data = pd.DataFrame(columns=column_data)
+        empty_data['produk_makeup'] = [pre_product[0]]
+        empty_data['skin_color'] = [pre_product[1]]
+        empty_data['skin_undertone'] = [pre_product[2]]
+        empty_data['kategori_harga'] = 1
+        empty_data['desc'] = self.cleaning_data([pre_product[0] + ' ' + pre_product[1] + ' ' + pre_product[2]])
+
+        geo = Geolocation()
+        pre_address = address.split(',')
+        final_address = 'Kecamatan ' + pre_address[0] + ', ' + 'Kabupaten' + pre_address[1] + ',' + pre_address[2]
+        print(final_address)
+        latlg = geo.get_latitude_longitude(final_address)
+        empty_data['latitude'] = [latlg[0]]
+        empty_data['longtitude'] = [latlg[1]]
+
+        sim, dis = self.get_numtext_content(empty_data.to_dict('records')[0], data_for_model)
+        get_user = data_for_model.copy()
+        get_user['sim'] = sim
+        get_user['dis'] = dis
+        get_user['final'] = get_user['sim']/(get_user['dis'] + 1)
+        get_user = get_user.sort_values(by=['final', 'rating'], ascending=[False, False], ignore_index=True)
+        get_user = get_user.iloc[[0]]
+        return get_user
+
+
