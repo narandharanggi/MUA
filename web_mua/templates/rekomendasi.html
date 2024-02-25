@@ -31,12 +31,12 @@ block content %}
                   value=""
                   type="text"
                   class="form-control alamat"
-                  placeholder="Masukkan Alamat"
+                  placeholder="Kecamatan, Kabupaten, Provinsi"
                 />
               </div>
             </div>
           </div>
-          <div class="sidebar-search sidebar-widget">
+          <div class="product-sidebar sidebar-widget">
             <div class="flex-product-widget">
               <div class="left-product-widget">
                 <div class="widget-title">
@@ -238,6 +238,15 @@ block content %}
         <div class="item-shorting clearfix"></div>
         <div class="category-block wrapper grid browse-add">
           <div class="grid-item feature-style-two four-column pd-0">
+            <div class="overlay">
+              <div class="overlay__wrapper">
+                  <div class="overlay__spinner">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+              </div>
+            </div>
             <div class="row row-product clearfix" id="product-container"></div>
           </div>
         </div>
@@ -350,7 +359,7 @@ block content %}
 
   let clone = $(".feature-block").clone();
   $(".feature-block").remove();
-  $("#loader").hide();
+  $(".overlay").hide();
   $("#rekomendasi").on("click", function () {
     if (Array.isArray(selected) && selected.length) {
       let values = {
@@ -363,10 +372,10 @@ block content %}
         type: "POST",
         data: values,
         beforeSend: function () {
-          $("#loader").show();
+          $(".overlay").show();
         },
         complete: function (data) {
-          $("#loader").hide();
+          $(".overlay").hide();
         },
       }).done(function (response) {
         // for (let i = 0; i < response["nama_mua"].length; i++) {

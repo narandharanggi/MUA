@@ -34,7 +34,7 @@ class Geolocation():
 class DataPreprocessing():
     def __init__(self, txt, num, alamat):
         #data for recommendation
-        dir = os.path.join(basedir, 'static/Data MUA.xlsx')
+        dir = os.path.join(basedir, 'static/Data MUA 2.xlsx')
         file_excel = pd.read_excel(dir)
         file_excel['desc'] = file_excel['produk_makeup'].astype(str) + ' ' + file_excel['shade'].astype(str) + ' ' + file_excel['skin_color'].astype(str) + ' ' + file_excel['skin_undertone'].astype(str)
         file_excel['desc'] = self.preprocessing(file_excel['desc'], query=False)
@@ -189,12 +189,12 @@ class Recommendation():
         return data_sim, distance
 
     def get_values(self, part_of_model):
-        tmp_data = part_of_model[['kategori_harga','sim_final']].to_numpy()
+        tmp_data = part_of_model[['kategori_harga','sim','distance']].to_numpy()
         sim_num = cosine_similarity(tmp_data)
         sim_num = np.array([np.mean(p) for p in sim_num])
         return sim_num
 
-    def new_data_preparation(self, data_for_model, query):
+    def data_preparation(self, data_for_model, query):
         query_data_todict = query.to_dict('index')[0]
         print(query_data_todict)
         # part_of_model = dm[dm.index != user].reset_index()
@@ -218,28 +218,25 @@ class Recommendation():
         part_of_model["sim_num"] = sim_num
         part_of_model = part_of_model.sort_values(by=['nama_MUA'])
         nama_mua = part_of_model["nama_MUA"].unique()
-        # value_mua = np.empty(len(nama_mua), dtype=float)
-        # for i in range(len(nama_mua)):
-        #     tmp_val = []
-        #     for j in range(len(part_of_model.index)):
-        #         if nama_mua[i] == part_of_model.nama_MUA[j]:
-        #             tmp_val.append(part_of_model["sim_final"][j])
-        #     value_mua[i] = np.mean(tmp_val)
-        # part_of_model = part_of_model.reset_index()
-        # part_of_model = part_of_model.drop(columns='index')
-        return nama_mua, part_of_model
-    
-    def rescale(self, val, in_min, in_max, out_min, out_max):
-        return out_min + (val - in_min) * ((out_max - out_min) / (in_max - in_min))
+        value_mua = np.empty(len(nama_mua), dtype=float)
+        for i in range(len(nama_mua)):
+            tmp_val = []
+            for j in range(len(part_of_model.index)):
+                if nama_mua[i] == part_of_model.nama_MUA[j]:
+                    tmp_val.append(part_of_model["sim_num"][j] + part_of_model["sim_final"][j])
+            value_mua[i] = np.mean(tmp_val)
+        part_of_model['total_mua'] = part_of_model["sim_num"] + part_of_model["sim_final"]
+        part_of_model = part_of_model.reset_index()
+        part_of_model = part_of_model.drop(columns='index')
+        return nama_mua, value_mua, part_of_model
 
     def predict(self):
-        query_data_todict, part_of_query, part_of_model = self.new_data_preparation(self.data, self.query)
-        nama_mua, part_of_model = self.value_of_mua(query_data_todict, part_of_model)
+        query_data_todict, part_of_query, part_of_model = self.data_preparation(self.data, self.query)
+        nama_mua, value_mua, part_of_model = self.value_of_mua(query_data_todict, part_of_model)
         pivot = pd.pivot_table(part_of_model, columns='nama_MUA', index='nama', values='rating', aggfunc='mean', fill_value=0)
         col_model = pivot.columns.tolist()
         val_model = np.array(pivot.values.tolist(), dtype=float)
         nama_user = np.array(pivot.index.tolist())
-        print(part_of_query)
         pivot_query = pd.pivot_table(part_of_query, columns='nama_MUA', index='nama', values='rating', aggfunc='mean', fill_value=0)
         val_query = pivot_query.values.tolist()
         col_query = pivot_query.columns.tolist()
@@ -257,19 +254,20 @@ class Recommendation():
                 if part_of_model["nama"][i] == nama_user[j]:
                     weight_user[i] = cos_sim_user[0][j]
             
-        # weight_content = np.empty(len(part_of_model), dtype=float)
-        # for i in range(len(part_of_model)):
-        #     for j in range(len(nama_mua)):
-        #         if part_of_model["nama_MUA"][i] == nama_mua[j]:
-        #             weight_content[i] = value_mua[j]
+        weight_content = np.empty(len(part_of_model), dtype=float)
+        for i in range(len(part_of_model)):
+            for j in range(len(nama_mua)):
+                if part_of_model["nama_MUA"][i] == nama_mua[j]:
+                    weight_content[i] = value_mua[j]
             
         final_res = part_of_model.copy()
         final_res = final_res[['nama', 'nama_MUA']]
         final_res['user'] = weight_user
+        final_res['content'] = weight_content
 
         mean_weight = np.zeros(len(part_of_model), dtype=float)
         for i in range(len(part_of_model)):
-            mean_weight[i] = part_of_model['sim_final'][i] * part_of_model['rating'][i] * final_res['user'][i]
+            mean_weight[i] = statistics.harmonic_mean([weight_user[i],  weight_content[i]]) 
         final_res['mean_'] = mean_weight
         final_res = final_res.sort_values(by=['mean_'], ignore_index=True, ascending=False)
         get_user = final_res.groupby("nama").mean_.agg(["mean"])
@@ -277,20 +275,19 @@ class Recommendation():
         pivot = part_of_model.copy()
         pivot['mean_'] = mean_weight
         pivot = pivot[pivot.nama.isin(list_nama)].reset_index()
-        pivot_ = pivot.groupby("nama_MUA").rating.agg(['count','mean'])
-        pivot_['weight'] = pivot.groupby("nama_MUA").mean_.agg(['mean'])
-        for i in range(len(pivot_['weight'])):
-            pivot_['weight'][i] = self.rescale(pivot_['weight'][i], min(pivot_['weight']), max(pivot_['weight']), 1, 5)
         distance = pivot[['nama_MUA','distance']]
         produk = pivot[['nama_MUA', 'sim']]
-        final_ = pivot[['nama_MUA', 'sim_num']]
+        final_ = pivot[['nama_MUA', 'sim_final']]
         desc = pivot[['nama_MUA', 'produk_makeup', 'shade', 'skin_color', 'skin_undertone']]
         desc['desc'] = desc['produk_makeup'] + ' - ' + desc['shade'] + ' - ' + desc['skin_color'] + ' - ' + desc['skin_undertone']
+        pivot_ = pivot.groupby("nama_MUA").rating.agg(['count','mean'])
         pivot_['nama_MUA'] = desc.groupby('nama_MUA').first().index.to_list()
+        pivot_['weight'] = pivot.groupby("nama_MUA").mean_.agg(['mean'])
+        pivot_['score'] = pivot_["mean"] * pivot_['weight']
         pivot_['desc'] = desc.groupby('nama_MUA').agg({'desc': lambda x: list(x)}).reset_index()['desc'].values
         pivot_['distance'] = distance.groupby("nama_MUA").distance.agg(['mean'])
+        pivot_['distance'] = [math.floor(x) for x in pivot_['distance']]
         pivot_['sim'] = produk.groupby("nama_MUA").sim.agg(['mean'])
-        pivot_['sim_final'] = final_.groupby("nama_MUA").sim_num.agg(['mean'])
-        pivot_ = pivot_.sort_values(by=['weight'], ignore_index=True, ascending=False)
-        print(pivot_)
+        pivot_['sim_final'] = final_.groupby("nama_MUA").sim_final.agg(['mean'])
+        pivot_ = pivot_.sort_values(by=['score'], ignore_index=True, ascending=False)
         return pivot_['nama_MUA'].values.tolist(), pivot_['mean'].values.tolist(), pivot_['distance'].values.tolist(), pivot_['desc'].values.tolist(), pivot_.index.to_list()

@@ -4444,7 +4444,17 @@ div#mCSB_1_container {
   position: relative;
   display: block;
   background: #fff;
-  padding: 24px 30px 30px 30px;
+  padding: 24px 30px 25px 30px;
+  box-shadow: 0px 20px 60px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.product-sidebar.sidebar-widget  {
+  position: relative;
+  display: block;
+  background: #fff;
+  padding: 24px 30px 45px 30px !important;
   box-shadow: 0px 20px 60px 0px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   margin-bottom: 30px;
