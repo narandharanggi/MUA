@@ -267,7 +267,7 @@ class Recommendation():
 
         mean_weight = np.zeros(len(part_of_model), dtype=float)
         for i in range(len(part_of_model)):
-            mean_weight[i] = statistics.harmonic_mean([weight_user[i],  weight_content[i]]) 
+            mean_weight[i] = statistics.harmonic_mean([weight_user[i] + np.min(weight_user[np.nonzero(weight_user)]),  weight_content[i]])
         final_res['mean_'] = mean_weight
         final_res = final_res.sort_values(by=['mean_'], ignore_index=True, ascending=False)
         get_user = final_res.groupby("nama").mean_.agg(["mean"])
